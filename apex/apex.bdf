@@ -40,7 +40,7 @@ applicable agreement for further details.
 	(input)
 	(rect -232 -64 -64 -48)
 	(text "INPUT" (rect 125 0 161 13)(font "Arial" (font_size 6)))
-	(text "KEY0" (rect 5 0 41 15)(font "Arial" ))
+	(text "KEY0" (rect 5 0 40 15)(font "Arial" ))
 	(pt 168 8)
 	(drawing
 		(line (pt 84 12)(pt 109 12))
@@ -153,6 +153,54 @@ applicable agreement for further details.
 		(line (pt 78 12)(pt 82 8))
 	)
 	(annotation_block (location)(rect 1016 72 1096 96))
+)
+(pin
+	(output)
+	(rect 800 -152 978 -136)
+	(text "OUTPUT" (rect 1 0 51 13)(font "Arial" (font_size 6)))
+	(text "ATM_RESET" (rect 90 0 172 15)(font "Arial" ))
+	(pt 0 8)
+	(drawing
+		(line (pt 0 8)(pt 52 8))
+		(line (pt 52 4)(pt 78 4))
+		(line (pt 52 12)(pt 78 12))
+		(line (pt 52 12)(pt 52 4))
+		(line (pt 78 4)(pt 82 8))
+		(line (pt 82 8)(pt 78 12))
+		(line (pt 78 12)(pt 82 8))
+	)
+)
+(pin
+	(output)
+	(rect 800 -120 976 -104)
+	(text "OUTPUT" (rect 1 0 51 13)(font "Arial" (font_size 6)))
+	(text "ATM_INT" (rect 90 0 147 15)(font "Arial" ))
+	(pt 0 8)
+	(drawing
+		(line (pt 0 8)(pt 52 8))
+		(line (pt 52 4)(pt 78 4))
+		(line (pt 52 12)(pt 78 12))
+		(line (pt 52 12)(pt 52 4))
+		(line (pt 78 4)(pt 82 8))
+		(line (pt 82 8)(pt 78 12))
+		(line (pt 78 12)(pt 82 8))
+	)
+)
+(pin
+	(output)
+	(rect 800 -200 980 -184)
+	(text "OUTPUT" (rect 1 0 51 13)(font "Arial" (font_size 6)))
+	(text "ATM_CLOCK" (rect 90 0 174 15)(font "Arial" ))
+	(pt 0 8)
+	(drawing
+		(line (pt 0 8)(pt 52 8))
+		(line (pt 52 4)(pt 78 4))
+		(line (pt 52 12)(pt 78 12))
+		(line (pt 52 12)(pt 52 4))
+		(line (pt 78 4)(pt 82 8))
+		(line (pt 82 8)(pt 78 12))
+		(line (pt 78 12)(pt 82 8))
+	)
 )
 (symbol
 	(rect 528 72 656 200)
@@ -366,10 +414,6 @@ applicable agreement for further details.
 	(pt 56 -144)
 )
 (connector
-	(pt 464 -144)
-	(pt 464 104)
-)
-(connector
 	(pt 464 104)
 	(pt 528 104)
 )
@@ -416,6 +460,34 @@ applicable agreement for further details.
 (connector
 	(pt 480 120)
 	(pt 528 120)
+)
+(connector
+	(pt 728 -144)
+	(pt 800 -144)
+)
+(connector
+	(pt 728 -128)
+	(pt 760 -128)
+)
+(connector
+	(pt 760 -128)
+	(pt 760 -112)
+)
+(connector
+	(pt 760 -112)
+	(pt 800 -112)
+)
+(connector
+	(pt 464 -192)
+	(pt 464 -144)
+)
+(connector
+	(pt 464 -144)
+	(pt 464 104)
+)
+(connector
+	(pt 800 -192)
+	(pt 464 -192)
 )
 (junction (pt 464 -144))
 (junction (pt 8 -120))

@@ -8,15 +8,17 @@ entity ul0525ctl is
 	    clk50      : in std_logic ;    --  50 MHz clock
 	    reset_in   : in std_logic ;    -- input reset circuit
 	    reset_out  : out std_logic ;   -- start of frame
-		 int        : out std_logic     -- integration signal
+		  int        : out std_logic     -- integration signal
 		 ) ;
 end ul0525ctl ;
 
 architecture arc_ul0525ctl of ul0525ctl is
 signal state: integer range 0 to 4 := 0 ;
-signal counter: integer range 0 to 1023 := 0 ;
+signal counter: integer range 0 to 16367 := 0 ;
+constant H: integer := 1024 ;
+constant V: integer := 768 ;
 begin
-  process (clk)
+  process (clk50)
   begin
   if rising_edge(clk50) then
 	if reset_in='1' then
@@ -33,10 +35,10 @@ begin
 			reset_out <= '1' ;
 		end if ;
 	elsif state=1 then
-	   reset_out <= '0' ;
-		counter <= 1024 ;
-		int <= '1' ;
-		state <= 2 ;
+		  reset_out <= '0' ;
+		  counter <= H ;
+    		int <= '1' ;
+		  state <= 2 ;
 	elsif state=2 then
 	   if counter>0 then
 			counter <= counter - 1 ;

@@ -1,8 +1,8 @@
 clc, clear all ;
 
 %Vout = 2.85 ;   % required output
-%Vout = 1.8 ;   % required output
-Vout = 3.6 ;
+Vout = 1.8 ;   % required output
+%Vout = 3.6 ;
 
 R1 = 240 ;      % (see. LM117.pdf)
 Vref = 1.25 ;   % (see LM117.pdf, mc33269-d.pdf)

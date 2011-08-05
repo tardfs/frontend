@@ -10,14 +10,16 @@ architecture test_ar_ul0525ctl of test_ul0525ctl is
 
 component ul0525ctl
   port (
-	    clk50      : in std_logic ;    --  50 MHz clock
+	    clk50      : in std_logic ;    -- 50 MHz clock
 	    reset_in   : in std_logic ;    -- input reset circuit
+	    clk        : out std_logic ;    -- 12.5 MHz clock
 	    reset_out  : out std_logic ;   -- start of frame
 		  int        : out std_logic     -- integration signal
 		 ) ;
 end component ;
 
 signal t_clk50 : std_logic:= '0' ;
+signal t_clk   : std_logic:= '0' ;
 signal t_reset_in : std_logic:= '0' ;
 signal t_reset_out : std_logic:= '0' ;
 signal t_int : std_logic:= '0' ;
@@ -28,6 +30,7 @@ begin
   port map (
     clk50 => t_clk50,
     reset_in => t_reset_in,
+    clk => t_clk,
     reset_out => t_reset_out,
     int => t_int 
     ) ;

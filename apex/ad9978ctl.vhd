@@ -5,8 +5,8 @@ use ieee.std_logic_arith.all ;
 
 entity ad9978ctl is
   port (
-	    clk     : in std_logic ; --  50 MHz clock 
-	    reset   : in std_logic ; --  async reset
+	   clk50   : in std_logic ; --  50 MHz clock 
+	   reset   : in std_logic ; --  async reset
 		 SL      : out std_logic ; -- SL signal
 		 SDATA   : out std_logic ; -- SDATA signal
 		 SCK     : out std_logic ; -- SCK signal

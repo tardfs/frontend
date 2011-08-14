@@ -14,7 +14,8 @@ component ul0525ctl
 	    reset_in   : in std_logic ;    -- input reset circuit
 	    clk        : out std_logic ;    -- 12.5 MHz clock
 	    reset_out  : out std_logic ;   -- start of frame
-		  int        : out std_logic     -- integration signal
+		  int        : out std_logic ;    -- integration signal
+		  serdat     : out std_logic      -- serial data
 		 ) ;
 end component ;
 

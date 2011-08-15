@@ -60,12 +60,16 @@ begin
     begin
       wait for 10 ns ;
       t_wr <= '0' ;
-      t_p_addr <= b"1001_1001" ;
-      t_p_data <= b"1010_1001_1010" ;
+      t_p_addr <= b"0101_0101" ;
+      t_p_data <= b"1010_1010_1010" ;
       t_p_channel_id <= b"00" ;
       wait for 10 ns ;
       t_wr <= '1' ;
-      wait for 20 ns ;
+      wait for 80 ns ;
+      t_wr <= '0' ;
+      wait for 2 us ;
+      t_wr <= '1' ;
+      wait for 80 ns ;
       t_wr <= '0' ;
       wait ;
     end process ;

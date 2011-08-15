@@ -28,62 +28,64 @@ architecture arc_ad9978port of ad9978port is
   signal channel_id  : std_logic_vector(1 downto 0) ;
   signal counter: integer range 0 to 11 ;
   signal sck_clk: std_logic := '1' ;
-  signal count4: integer range 0 to 4 := 0 ;
+  signal count4: std_logic_vector(1 downto 0) := b"00" ;
 begin
-  SCK <= '1' when state=ST_Idle else sck_clk ;
+  SCK <= '1' when state=ST_Idle else count4(1) ;
   process (clk50)
     begin
       if rising_edge(clk50) then
         count4 <= count4 + 1 ;
-        if count4=1 then
+        if count4=b"11" then
           sck_clk <= not sck_clk ;
-          count4 <= 0 ;
+          count4 <= b"00" ;
         end if ;
       end if ;
   end process ;
   
   process (clk50)
   begin
-    if rising_edge(clk50) then
-      if state=ST_Idle then
-        SL <= '1' ;
-        SDATA <= '0' ;
-        if wr='1' then
-          addr <= p_addr ;
-          data <= p_data ;
-          channel_id <= p_channel_id ;
-          state <= ST_Addr ;
-          counter <= 0 ;
-          SL <= '0' ;
-          SDATA <= p_addr(0) ;
-        end if ;
-      elsif state=ST_Addr then
-        if counter<7 then
-          SDATA <= addr(counter+1) ;
-          counter <= counter + 1 ;
-        else
-          SDATA <= data(0) ;
-          counter <= 0 ;
-          state <= ST_Data ;
-        end if ;
-      elsif state=ST_Data then
-        if counter<11 then
-          SDATA <= data(counter+1) ;
-          counter <= counter + 1 ;
-        else
-          SDATA <= channel_id(0) ;
-          counter <= 0 ;
-          state <= ST_ChannelId ;
-        end if ;
-      elsif state=ST_ChannelId then
-        if counter<3 then
-          SDATA <= channel_id(counter+1) ;
-          counter <= counter + 1 ;
-        else
-          SDATA <= '0' ;
-          counter <= 0 ;
-          state <= ST_Idle ;
+    if rising_edge(clk50) then      
+      if count4=b"11" then
+        if state=ST_Idle then
           SL <= '1' ;
+          SDATA <= '0' ;
+          if wr='1' then
+            addr <= p_addr ;
+            data <= p_data ;
+            channel_id <= p_channel_id ;
+            state <= ST_Addr ;
+            counter <= 0 ;
+            SL <= '0' ;
+            SDATA <= p_addr(0) ;
+          end if ;
+        elsif state=ST_Addr then
+          if counter<7 then
+            SDATA <= addr(counter+1) ;
+            counter <= counter + 1 ;
+          else
+            SDATA <= data(0) ;
+            counter <= 0 ;
+            state <= ST_Data ;
+          end if ;
+        elsif state=ST_Data then
+          if counter<11 then
+            SDATA <= data(counter+1) ;
+            counter <= counter + 1 ;
+          else
+            SDATA <= channel_id(0) ;
+            counter <= 0 ;
+            state <= ST_ChannelId ;
+          end if ;
+        elsif state=ST_ChannelId then
+          if counter<1 then
+            SDATA <= channel_id(counter+1) ;
+            counter <= counter + 1 ;
+          else
+            SDATA <= '0' ;
+            counter <= 0 ;
+            state <= ST_Idle ;
+            SL <= '1' ;
+          end if ;
         end if ;
       end if ;
     end if ;

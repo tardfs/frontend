@@ -5,14 +5,14 @@ use ieee.std_logic_arith.all ;
 
 entity ad9978ctl is
   port (
-	   clk50   : in std_logic ; --  50 MHz clock 
-	   reset   : in std_logic ; --  async reset
-		 SL      : out std_logic ; -- SL signal
-		 SDATA   : out std_logic ; -- SDATA signal
-		 SCK     : out std_logic ; -- SCK signal
-		 HD      : out std_logic ; -- HD signal
-		 VD      : out std_logic   -- VD signal
-		 ) ;
+		clk50   : in std_logic ; --  50 MHz clock 
+		reset   : in std_logic ; --  async reset
+		SL      : out std_logic ; -- SL signal
+		SDATA   : out std_logic ; -- SDATA signal
+		SCK     : out std_logic ; -- SCK signal
+		HD      : out std_logic ; -- HD signal
+		VD      : out std_logic   -- VD signal
+		) ;
 end ad9978ctl ;
 
 architecture arc_ad9978ctl of ad9978ctl is
@@ -24,13 +24,14 @@ component ad9978port
 	   p_data       : in std_logic_vector(11 downto 0) ;
 	   p_channel_id : in std_logic_vector(1 downto 0) ;
 	   wr           : in std_logic ;
-	   
-		 SL      : out std_logic ; -- SL signal
-		 SDATA   : out std_logic ; -- SDATA signal
-		 SCK     : out std_logic   -- SCK signal
-		 
+
+	   SL      : out std_logic ; -- SL signal
+	   SDATA   : out std_logic ; -- SDATA signal
+	   SCK     : out std_logic   -- SCK signal
+   
 		 ) ;
 end component ;
+
 type config_data_type is array (0 to 8) of std_logic_vector(21 downto 0) ;
 signal config_data: config_data_type := 
 (
@@ -84,9 +85,9 @@ begin
 		reg_count <= 0 ;
 		clk_count <= 0 ;
 	else
-	  if reg_count<9 then
+	  if reg_count<config_data'high then
 	    if clk_count<config_timings(reg_count)
-	      clk_count <= clk_count+1 ;
+		  clk_count <= clk_count + 1 ;
 	    else
 	      addr <= config_data(reg_count)(21 downto 14) ;
 	      data <= config_data(reg_count)(13 downto 2) ;

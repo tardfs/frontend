@@ -50,14 +50,16 @@ signal config_timings: config_timings :=
 (
 10, 10, 10, 10, 10, 10, 10, 10, 10
 ) ;
+constant SET_CLKS : integer := 2 ;
+constant WRITE_CLKS: integer := 2 ;
 signal addr       : std_logic_vector(7 downto 0) ;
 signal data       : std_logic_vector(11 downto 0) ;
 signal channel_id : std_logic_vector(1 downto 0) ;
 signal wr         : std_logic = '0' ;
 signal reg_count  : integer range 0 to 15 ;
 signal clk_count  : integer range 0 to 2048 ;
-type state_type is (ST_Idle,ST_Wait,ST_Write) ;
-signal state      : state_type := ST_Idle ;
+type state_type is (ST_Set,ST_Write,ST_Wait) ;
+signal state      : state_type := ST_Wait ;
 begin
   conf_port:
   ad9978port
@@ -84,17 +86,37 @@ begin
 		VD <= '1' ;
 		reg_count <= 0 ;
 		clk_count <= 0 ;
+		state <= ST_Wait ;
 	else
 	  if reg_count<config_data'high then
-	    if clk_count<config_timings(reg_count)
-		  clk_count <= clk_count + 1 ;
-	    else
-	      addr <= config_data(reg_count)(21 downto 14) ;
-	      data <= config_data(reg_count)(13 downto 2) ;
-	      config_id <= config_data(reg_count)(1 downto 0) ;
-	      reg_count <= reg_count + 1 ;
-	      clk_count <= 0 ;
-	    end if ;
+	    if state=ST_Wait then
+		  if clk_count<config_timings(reg_count) then
+		    clk_count <= clk_count + 1 ;
+		  else
+            clk_count <= 0 ;
+            reg_count <= reg_count + 1 ;
+            addr <= config_data(reg_count)(21 downto 14) ;
+            data <= config_data(reg_count)(13 downto 2) ;
+            config_id <= config_data(reg_count)(1 downto 0) ;
+		    state <= ST_Set ;
+		  end if ;
+		elsif state=ST_Set then
+		  if clk_count<SET_CLKS then
+		    clk_count <= clk_count + 1 ;
+		  else
+            wr <= '1' ;
+            clk_count <= 0 ;
+		    state <= ST_Wait ;
+          end if ;
+		elsif state=ST_Write then
+		  if clk_count<WRITE_CLKS then
+		    clk_count <= clk_count + 1 ;
+		  else
+            wr <= '0' ;
+            clk_count <= 0 ;
+		    state <= ST_Wait ;
+          end if ;
+		end if ;
 	  end if ;
 	end if ;
   end if ;

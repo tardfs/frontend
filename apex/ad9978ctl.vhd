@@ -22,7 +22,7 @@ component ad9978port
 	   clk50        : in std_logic ;  --  50 MHz clock 
 	   p_addr       : in std_logic_vector(7 downto 0) ;
 	   p_data       : in std_logic_vector(11 downto 0) ;
-	   p_channel_id : in std_logic_vector(1 downto 0) ;
+	   p_channel_id : in std_logic_vector(3 downto 0) ;
 	   wr           : in std_logic ;
 
 	   SL      : out std_logic ; -- SL signal
@@ -32,30 +32,30 @@ component ad9978port
 		 ) ;
 end component ;
 
-type config_data_type is array (0 to 8) of std_logic_vector(21 downto 0) ;
+type config_data_type is array (0 to 8) of std_logic_vector(23 downto 0) ;
 signal config_data: config_data_type := 
 (
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00",
-  b"00000000_000000000000_00"
+  b"01010000_000000000001_1111", -- write 1 to 0x50 (software reset)
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111",
+  b"00000000_000000000000_1111"
 ) ;
 type config_timings_type is array (0 to 8) of integer range 0 to 2048 ;
-signal config_timings: config_timings := 
+signal config_timings: config_timings_type := 
 (
-10, 10, 10, 10, 10, 10, 10, 10, 10
+10, 150, 100, 100, 100, 100, 100, 100, 100
 ) ;
 constant SET_CLKS : integer := 2 ;
 constant WRITE_CLKS: integer := 2 ;
 signal addr       : std_logic_vector(7 downto 0) ;
 signal data       : std_logic_vector(11 downto 0) ;
-signal channel_id : std_logic_vector(1 downto 0) ;
-signal wr         : std_logic = '0' ;
+signal channel_id : std_logic_vector(3 downto 0) ;
+signal wr         : std_logic := '0' ;
 signal reg_count  : integer range 0 to 15 ;
 signal clk_count  : integer range 0 to 2048 ;
 type state_type is (ST_Set,ST_Write,ST_Wait) ;
@@ -69,7 +69,7 @@ begin
     p_addr => addr,
     p_data => data,
     p_channel_id => channel_id,
-    wr => t_wr,
+    wr => wr,
     
     SL => SL,
     SDATA => SDATA,
@@ -77,9 +77,9 @@ begin
     
     ) ;
   
-  process (clk)
+  process (clk50)
   begin
-  if rising_edge(clk) then
+  if rising_edge(clk50) then
 	if reset='1' then
 		-- reset circuit
 		HD <= '1' ;
@@ -97,7 +97,7 @@ begin
             reg_count <= reg_count + 1 ;
             addr <= config_data(reg_count)(21 downto 14) ;
             data <= config_data(reg_count)(13 downto 2) ;
-            config_id <= config_data(reg_count)(1 downto 0) ;
+            channel_id <= config_data(reg_count)(3 downto 0) ;
 		    state <= ST_Set ;
 		  end if ;
 		elsif state=ST_Set then
@@ -106,7 +106,7 @@ begin
 		  else
             wr <= '1' ;
             clk_count <= 0 ;
-		    state <= ST_Wait ;
+		    state <= ST_Write ;
           end if ;
 		elsif state=ST_Write then
 		  if clk_count<WRITE_CLKS then
@@ -117,6 +117,9 @@ begin
 		    state <= ST_Wait ;
           end if ;
 		end if ;
+      else
+		HD <= '0' ;
+		VD <= '0' ;       
 	  end if ;
 	end if ;
   end if ;

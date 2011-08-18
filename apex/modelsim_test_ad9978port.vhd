@@ -14,7 +14,7 @@ component ad9978port
 	   clk50        : in std_logic ;  --  50 MHz clock 
 	   p_addr       : in std_logic_vector(7 downto 0) ;
 	   p_data       : in std_logic_vector(11 downto 0) ;
-	   p_channel_id : in std_logic_vector(1 downto 0) ;
+	   p_channel_id : in std_logic_vector(3 downto 0) ;
 	   wr           : in std_logic ;
 	   
 		 SL      : out std_logic ; -- SL signal
@@ -27,7 +27,7 @@ end component ;
 signal t_clk50        : std_logic := '0' ;  --  50 MHz clock 
 signal	t_p_addr       : std_logic_vector(7 downto 0) ;
 signal t_p_data       : std_logic_vector(11 downto 0) ;
-signal t_p_channel_id : std_logic_vector(1 downto 0) ;
+signal t_p_channel_id : std_logic_vector(3 downto 0) ;
 signal t_wr           : std_logic ;
 	   
 signal t_SL      : std_logic ; -- SL signal
@@ -62,7 +62,7 @@ begin
       t_wr <= '0' ;
       t_p_addr <= b"0101_0101" ;
       t_p_data <= b"1010_1010_1010" ;
-      t_p_channel_id <= b"00" ;
+      t_p_channel_id <= b"1111" ;
       wait for 10 ns ;
       t_wr <= '1' ;
       wait for 80 ns ;

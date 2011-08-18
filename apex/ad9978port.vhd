@@ -9,12 +9,12 @@ entity ad9978port is
 	   clk50        : in std_logic ;  --  50 MHz clock 
 	   p_addr       : in std_logic_vector(7 downto 0) ;
 	   p_data       : in std_logic_vector(11 downto 0) ;
-	   p_channel_id : in std_logic_vector(1 downto 0) ;
+	   p_channel_id : in std_logic_vector(3 downto 0) ;
 	   wr           : in std_logic ;
 	   
-		 SL      : out std_logic ; -- SL signal
-		 SDATA   : out std_logic ; -- SDATA signal
-		 SCK     : out std_logic   -- SCK signal
+	   SL      : out std_logic ; -- SL signal
+	   SDATA   : out std_logic ; -- SDATA signal
+	   SCK     : out std_logic   -- SCK signal
 		 
 		 ) ;
 end ad9978port ;
@@ -25,7 +25,7 @@ architecture arc_ad9978port of ad9978port is
   signal state: state_type:= ST_Idle ;
   signal addr : std_logic_vector(7 downto 0) ;
   signal data : std_logic_vector(11 downto 0) ;
-  signal channel_id  : std_logic_vector(1 downto 0) ;
+  signal channel_id  : std_logic_vector(3 downto 0) ;
   signal counter: integer range 0 to 11 ;
   signal sck_clk: std_logic := '1' ;
   signal count4: std_logic_vector(1 downto 0) := b"00" ;
@@ -59,7 +59,7 @@ begin
             SDATA <= p_addr(0) ;
           end if ;
         elsif state=ST_Addr then
-          if counter<7 then
+          if counter<addr'high then
             SDATA <= addr(counter+1) ;
             counter <= counter + 1 ;
           else
@@ -68,7 +68,7 @@ begin
             state <= ST_Data ;
           end if ;
         elsif state=ST_Data then
-          if counter<11 then
+          if counter<data'high then
             SDATA <= data(counter+1) ;
             counter <= counter + 1 ;
           else
@@ -77,7 +77,7 @@ begin
             state <= ST_ChannelId ;
           end if ;
         elsif state=ST_ChannelId then
-          if counter<1 then
+          if counter<p_channel_id'high then
             SDATA <= channel_id(counter+1) ;
             counter <= counter + 1 ;
           else

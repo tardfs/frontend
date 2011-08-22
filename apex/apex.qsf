@@ -67,6 +67,5 @@ set_location_assignment PIN_AE24 -to SCK
 set_location_assignment PIN_AF20 -to SDATA
 set_location_assignment PIN_AH23 -to SL
 set_location_assignment PIN_AG22 -to VD
-set_global_assignment -name QIP_FILE altpll_12p5.qip
 set_global_assignment -name VHDL_FILE ul0525ctl.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

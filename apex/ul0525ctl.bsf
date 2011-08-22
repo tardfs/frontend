@@ -20,9 +20,9 @@ applicable agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 192 112)
+	(rect 16 16 192 144)
 	(text "ul0525ctl" (rect 5 0 68 12)(font "Arial" ))
-	(text "inst" (rect 8 80 36 92)(font "Arial" ))
+	(text "inst" (rect 8 112 36 124)(font "Arial" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -40,18 +40,32 @@ applicable agreement for further details.
 	(port
 		(pt 176 32)
 		(output)
-		(text "reset_out" (rect 0 0 63 12)(font "Arial" ))
-		(text "reset_out" (rect 92 27 155 39)(font "Arial" ))
+		(text "clk" (rect 0 0 21 12)(font "Arial" ))
+		(text "clk" (rect 134 27 155 39)(font "Arial" ))
 		(line (pt 176 32)(pt 160 32)(line_width 1))
 	)
 	(port
 		(pt 176 48)
 		(output)
-		(text "int" (rect 0 0 21 12)(font "Arial" ))
-		(text "int" (rect 134 43 155 55)(font "Arial" ))
+		(text "reset_out" (rect 0 0 63 12)(font "Arial" ))
+		(text "reset_out" (rect 92 43 155 55)(font "Arial" ))
 		(line (pt 176 48)(pt 160 48)(line_width 1))
 	)
+	(port
+		(pt 176 64)
+		(output)
+		(text "int" (rect 0 0 21 12)(font "Arial" ))
+		(text "int" (rect 134 59 155 71)(font "Arial" ))
+		(line (pt 176 64)(pt 160 64)(line_width 1))
+	)
+	(port
+		(pt 176 80)
+		(output)
+		(text "serdat" (rect 0 0 42 12)(font "Arial" ))
+		(text "serdat" (rect 113 75 155 87)(font "Arial" ))
+		(line (pt 176 80)(pt 160 80)(line_width 1))
+	)
 	(drawing
-		(rectangle (rect 16 16 160 80)(line_width 1))
+		(rectangle (rect 16 16 160 112)(line_width 1))
 	)
 )

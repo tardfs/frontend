@@ -6,7 +6,7 @@ use ieee.std_logic_arith.all ;
 entity ad9978ctl is
   port (
 		clk50   : in std_logic ; --  50 MHz clock 
-		reset   : in std_logic ; --  async reset
+		reset   : in std_logic ; --  sync reset
 		SL      : out std_logic ; -- SL signal
 		SDATA   : out std_logic ; -- SDATA signal
 		SCK     : out std_logic ; -- SCK signal
@@ -36,17 +36,17 @@ type config_data_type is array (0 to 8) of std_logic_vector(23 downto 0) ;
 signal config_data: config_data_type := 
 (
   b"01010000_000000000001_1111", -- write 1 to 0x50 (software reset)
-  b"00000000_000000000000_1111",
-  b"00000000_000000000000_1111",
-  b"00000000_000000000000_1111",
-  b"00000000_000000000000_1111",
-  b"00000000_000000000000_1111",
+  b"01000001_000100000000_1111", -- write 0x80 to 0x41
+  b"01001110_010000000000_1111", -- write 0x40 to bits 11:4 of 0x4E
+  b"01001111_010000000000_1111", -- write 0x80 to bits 11:3 of 0x4F
+  b"11101001_000001100000_1111", -- write 0x60 to 0xE9
+  b"01000001_000100000010_1111", -- write 0x82 to 0x41
   b"00000000_000000000000_1111",
   b"00000000_000000000000_1111",
   b"00000000_000000000000_1111"
 ) ;
 type config_timings_type is array (0 to 8) of integer range 0 to 2048 ;
-signal config_timings: config_timings_type := 
+signal config_timings: config_timings_type :=  -- x20ns
 (
 10, 150, 100, 100, 100, 100, 100, 100, 100
 ) ;

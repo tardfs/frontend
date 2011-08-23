@@ -52,14 +52,13 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLI
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CLI
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CLOCK_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HD
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to RESET
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SCK
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SDATA
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to SL
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to VD
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SDATA
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SL
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to VD
 set_location_assignment PIN_AC15 -to CLI
 set_location_assignment PIN_Y2 -to CLOCK_50
 set_location_assignment PIN_AE25 -to HD
@@ -68,4 +67,12 @@ set_location_assignment PIN_AF20 -to SDATA
 set_location_assignment PIN_AH23 -to SL
 set_location_assignment PIN_AG22 -to VD
 set_global_assignment -name VHDL_FILE ul0525ctl.vhd
+set_location_assignment PIN_AH26 -to ATM_CLOCK
+set_location_assignment PIN_AG26 -to ATM_INT
+set_location_assignment PIN_AG23 -to ATM_RESET
+set_location_assignment PIN_M23 -to KEY0
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to KEY0
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ATM_RESET
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ATM_INT
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ATM_CLOCK
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

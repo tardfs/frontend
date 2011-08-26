@@ -54,7 +54,7 @@ set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CLI
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CLOCK_50
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to HD
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to HD
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SCK
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SDATA
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SL

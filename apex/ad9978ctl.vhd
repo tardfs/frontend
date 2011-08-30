@@ -60,6 +60,9 @@ signal reg_count  : integer range 0 to 15 ;
 signal clk_count  : integer range 0 to 2048 ;
 type state_type is (ST_Set,ST_Write,ST_Wait) ;
 signal state      : state_type := ST_Wait ;
+signal coln_count : integer range 0 to 1023 := 1023 ;
+signal line_count : integer range 0 to 767 := 767 ;
+signal hdvd_ena   : std_logic := '0' ;
 begin
   conf_port:
   ad9978port
@@ -82,11 +85,10 @@ begin
   if rising_edge(clk50) then
 	if reset='1' then
 		-- reset circuit
-		HD <= '1' ;
-		VD <= '1' ;
 		reg_count <= 0 ;
 		clk_count <= 0 ;
 		state <= ST_Wait ;
+        hdvd_ena <= '0' ;
 	else
 	  if reg_count<config_data'high then
 	    if state=ST_Wait then
@@ -118,10 +120,39 @@ begin
           end if ;
 		end if ;
       else
-		HD <= '0' ;
-		VD <= '0' ;       
+		hdvd_ena <= '1' ;
 	  end if ;
 	end if ;
   end if ;
   end process ;
+  process(clk50)
+    begin
+    if rising_edge(clk50) then
+        if hdvd_ena='1' then
+            if coln_count=10 then
+                HD <= '1' ;
+                if line_count=0 then
+                    VD <= '1' ;
+                end if ;
+            end if ;
+            if coln_count<1023 then
+                coln_count <= coln_count + 1 ;
+            else
+                coln_count <= 0 ;
+                HD <= '0' ;
+                if line_count<767 then
+                    line_count <= line_count + 1 ;
+                else
+                    line_count <= 0 ;
+                    VD <= '0' ;
+                end if ;
+            end if ;                
+        else
+            line_count <= 767 ;
+            coln_count <= 1023 ;
+            HD <= '1' ;
+            VD <= '1' ;
+        end if ;
+    end if ;
+    end process ;
 end architecture arc_ad9978ctl ;

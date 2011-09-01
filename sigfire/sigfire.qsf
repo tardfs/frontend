@@ -86,4 +86,16 @@ set_location_assignment PIN_AD27 -to SW3
 set_location_assignment PIN_AB27 -to SW4
 set_location_assignment PIN_AC26 -to SW5
 set_location_assignment PIN_AD26 -to SW6
+set_location_assignment PIN_AE25 -to HD
+set_location_assignment PIN_AG22 -to VD
+set_location_assignment PIN_AF26 -to ATM_SERDAT
+set_location_assignment PIN_AB26 -to SW7
+set_location_assignment PIN_AC25 -to SW8
+set_location_assignment PIN_AB25 -to SW9
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ATM_SERDAT
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SW7
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SW8
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SW9
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to VD
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to HD
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

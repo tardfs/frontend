@@ -1,5 +1,6 @@
 -- see 22.2.4 Management functions 
 -- of http://standards.ieee.org/getieee802/download/802.3-2008_section2.pdf
+-- http://www.xilinx.com/support/documentation/application_notes/xapp1042.pdf
 library ieee ;
 use ieee.std_logic_1164.all ;
 use ieee.std_logic_signed.all ;

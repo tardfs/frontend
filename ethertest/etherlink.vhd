@@ -13,9 +13,9 @@ entity etherlink is
         tx_clk  : in std_logic ;  -- MII transmit clock 1
         tx_en   : out std_logic ; -- GMII and MII transmit enable 1
         tx_er   : out std_logic ; -- GMII and MII transmit error 1
-        rst   : out std_logic
+        rst   : out std_logic ;
         
-        start_packet:   in std_logic ;
+        start_packet:   in std_logic 
         
         --rx_data : in std_logic_vector(3 downto 0) ;
         --rx_clk  : in std_logic ;
@@ -28,7 +28,7 @@ entity etherlink is
 end etherlink ;
 
 architecture ar_etherlink of etherlink is
-type frame_type is array (0 to 8) of std_logic_vector(7 downto 0) ;
+type frame_type is array (0 to 7) of std_logic_vector(7 downto 0) ;
 signal eth_frame: frame_type := ( x"00", x"00", x"00", x"00", x"00", x"00", x"00", x"00" ) ;
 signal byte_counter: integer range 0 to 2047 := 0 ;
 signal nibler: std_logic := '0' ;
@@ -36,6 +36,7 @@ type state_type is (EthIdle,EthTr) ;
 signal state  : state_type := EthIdle ;
 begin
 process(tx_clk)
+  variable byte_value: std_logic_vector(7 downto 0) ;
 begin
     if falling_edge(tx_clk) then
         if reset='1' then
@@ -52,13 +53,13 @@ begin
                     tx_er <= '0' ;
                     nibler <= '0' ;
                 end if ;
-            elsif stata=EthTr then
+            elsif state=EthTr then
                 if byte_counter<=eth_frame'high then
-                    nibler <= not nibler ;
+                    byte_value := eth_frame(byte_counter) ;
                     if nibler='0' then
-                        tx_data <= eth_frame(byte_counter,7 downto 4) ;
+                        tx_data <= byte_value(7 downto 4) ;
                     else
-                        tx_data <= eth_frame(byte_counter,3 downto 0) ;
+                        tx_data <= byte_value(3 downto 0) ;
                         byte_counter <= byte_counter + 1 ;
                     end if ;
                     nibler <= not nibler ;
@@ -69,6 +70,6 @@ begin
                 end if ;
             end if ;
         end if ;
-    end ;
+    end if ;
 end process ;
 end architecture ar_etherlink ;

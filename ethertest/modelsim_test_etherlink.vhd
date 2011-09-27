@@ -29,12 +29,12 @@ component etherlink is
         --rx_col  : in std_logic ;
         
 		) ;
-end etherlink ;
+end component etherlink ;
 
 signal t_reset   : std_logic ;
 signal t_tx_data : std_logic_vector(3 downto 0) ;
 signal t_gtx_clk : std_logic ;
-signal t_tx_clk  : std_logic ;
+signal t_tx_clk  : std_logic := '0' ;
 signal t_tx_en   : std_logic ;
 signal t_tx_er   : std_logic ;
 signal t_rst     : std_logic ;
@@ -44,25 +44,33 @@ begin
   dut:
   etherlink
   port map (
-    
     reset => t_reset,
     tx_data => t_tx_data,
-    t_gtx_clk => t_gtx_clk,
-    mdio => t_mdio
-    
+    gtx_clk => t_gtx_clk,
+    tx_clk => t_tx_clk,
+    tx_en => t_tx_en,
+    tx_er => t_tx_er,
+    rst => t_rst,
+    start_packet => t_start_packet
     ) ;
     
-    clock50:process 
+    clock25:process
     begin
-      wait for 10 ns ; t_clk50 <= not t_clk50 ;
+      wait for 20 ns ; t_tx_clk <= not t_tx_clk ;
     end process ;
     
     stimulus: process
     begin
+      t_start_packet <= '0' ;
+      t_reset <= '0' ;
       wait for 10 ns ;
       t_reset <= '1' ;
       wait for 100 ns ;
       t_reset <= '0' ;
+      wait for 100 ns ;
+      t_start_packet <= '1' ;
+      wait for 40 ns ;
+      t_start_packet <= '0' ;
       wait ;
     end process ;
     

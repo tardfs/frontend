@@ -26,15 +26,78 @@ unsigned char pEthPack1[] = {
 } ;
 unsigned long crc32(unsigned char *buf, int len) ;
 
+void dump(unsigned char *buf, int len)
+{
+	FILE* f = fopen("packet.vhd","wt") ;
+	if (f)
+	{
+		// type frame_type is array (0 to 7) of std_logic_vector(7 downto 0) ;
+		// signal eth_frame: frame_type := ( x"00", x"00", x"00") ;
+		fprintf(f,"type frame_type is array (0 to %1d) of std_logic_vector(7 downto 0) ;\n",len-1) ;
+		fprintf(f,"signal eth_frame: frame_type := (\n") ;
+		for (int i=0;i<len;i++)
+		{
+			if (i==(len-1))
+			{
+				fprintf(f,"x\"%02x\"",buf[i]) ;
+			}
+			else
+			{
+				fprintf(f,"x\"%02x\",",buf[i]) ;
+			}
+			if (i<22)
+			{
+				if (i==6 || i==7 || i==13 || i==19 || i==21) //((i-1)%16)==0
+				{
+					fprintf(f,"\n") ;
+				}
+			}
+			else if (i<len-5)
+			{
+				if (((i-21)%8)==0) //((i-1)%16)==0
+				{
+					fprintf(f,"\n") ;
+				}
+			}
+			else if (i==len-5)
+			{
+				fprintf(f,"\n") ;
+			}
+		}
+		fprintf(f,") ;\n") ;
+		fclose(f) ;
+	}
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	unsigned int r = 0 ;
+	unsigned int mem_crc32 = 0 ;
 	// build eth frame
+	/*
 	printf("EthPack1 size is: %d bytes.\n", sizeof(pEthPack1)) ;
 	r = ComputeCrc(pEthPack1,8*sizeof(pEthPack1),0x04c11db7,32,0xffffffff,0xffffffff,0,0,0,1) ;
 	printf("CRC32 is 0x%08X\n", r ) ;
 	r = crc32(pEthPack1,sizeof(pEthPack1)) ;
 	printf("CRC32 is 0x%08X\n", r ) ;
+	dump(pEthPack1,sizeof(pEthPack1)) ;
+	*/
+	szBuf[0] = 0x55 ;
+	szBuf[1] = 0x55 ;
+	szBuf[2] = 0x55 ;
+	szBuf[3] = 0x55 ;
+	szBuf[4] = 0x55 ;
+	szBuf[5] = 0x55 ;
+	szBuf[6] = 0x55 ;
+	szBuf[7] = 0xd5 ;
+	memcpy(szBuf+8,pEthPack1,sizeof(pEthPack1)) ;
+	mem_crc32 = crc32(pEthPack1,sizeof(pEthPack1)) ;
+	unsigned char* p_crc32 = (unsigned char*) &mem_crc32 ;
+	szBuf[8+sizeof(pEthPack1)+0] = p_crc32[3] ;
+	szBuf[8+sizeof(pEthPack1)+1] = p_crc32[2] ;
+	szBuf[8+sizeof(pEthPack1)+2] = p_crc32[1] ;
+	szBuf[8+sizeof(pEthPack1)+3] = p_crc32[0] ;
+	dump(szBuf,8+sizeof(pEthPack1)+4) ;
+
 	return (0) ;
 }
 

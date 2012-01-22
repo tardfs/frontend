@@ -35,11 +35,14 @@ entity ethertest is
 end ethertest ;
 
 architecture ar_ethertest of ethertest is
+signal eth_status: std_logic_vector(3 downto 0) ;
 component ifconfig is
   port (
         
         reset   : in std_logic ;
         clk50   : in std_logic ;
+        
+        status  : out std_logic_vector(3 downto 0) ;
         
         mdc     : out std_logic ;
         mdio    : inout std_logic 
@@ -55,7 +58,7 @@ component etherlink is
         tx_clk  : in std_logic ;  -- MII transmit clock 1
         tx_en   : out std_logic ; -- GMII and MII transmit enable 1
         tx_er   : out std_logic ; -- GMII and MII transmit error 1
-        rst   : out std_logic ;
+        rst     : out std_logic ;
         
         start_packet:   in std_logic 
         
@@ -73,6 +76,7 @@ ifconf: ifconfig
     port map (
         reset => key(0),
         clk50 => clock_50,
+        status => eth_status,       
         mdc => enet0_mdc,
         mdio => enet0_mdio
         ) ;

@@ -11,6 +11,8 @@ entity ethertest is
     clock3_50   : in std_logic ;
 		
     key             : in std_logic_vector(3 downto 0) ;
+    ledr            : out std_logic_vector(17 downto 0) ;
+    ledg            : out std_logic_vector(8 downto 0) ;
 	
     enet0_gtx_clk   : out std_logic ;
     enet0_int_n     : in std_logic ;
@@ -72,6 +74,7 @@ component etherlink is
 		) ;
 end component etherlink ;
 begin
+ledg(3 downto 0) <= eth_status ;
 ifconf: ifconfig 
     port map (
         reset => key(0),

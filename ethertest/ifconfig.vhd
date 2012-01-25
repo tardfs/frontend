@@ -27,15 +27,19 @@ constant REG_ID0: std_logic_vector(4 downto 0)  := "00010" ;
 constant REG_ID1: std_logic_vector(4 downto 0)  := "00011" ;
 
 constant MPHY_CONTROL_REG: std_logic_vector(4 downto 0) := b"00000" ;
+constant MPHY_CONTROL_RESET         : integer := 15 ;
 constant MPHY_CONTROL_LOOPBACK      : integer := 14 ;
-constant MPHY_CONTROL_AUTONEG       : integer := 12 ;
 constant MPHY_CONTROL_SPD_SEL_LSB   : integer := 13 ;
+constant MPHY_CONTROL_AUTONEG       : integer := 12 ;
+constant MPHY_CONTROL_POWERDN       : integer := 11 ;
+constant MPHY_CONTROL_ISOLATE       : integer := 10 ;
+constant MPHY_CONTROL_RSTRT_AUTONEG : integer := 9 ;
+constant MPHY_CONTROL_DUPLEX        : integer := 8 ;
+constant MPHY_CONTROL_COLTEST       : integer := 7 ;
 constant MPHY_CONTROL_SPD_SEL_MSB   : integer := 6 ;
 constant MPHY_CONTROL_SPD_SEL_1000  : integer := 1 ;
 constant MPHY_CONTROL_SPD_SEL_100   : integer := 0 ;
 --       MPHY_CONTROL_SPD_SEL_10    : bits 0,1 <= "00" ;
-constant MPHY_CONTROL_RSTRT_AUTONEG : integer := 9 ;
-constant MPHY_CONTROL_DUPLEX        : integer := 8 ;
 
 constant MPHY_STATUS_REG: std_logic_vector(4 downto 0) := b"00001" ;
 constant MPHY_STATUS_LINK           : integer := 2 ;
@@ -127,8 +131,8 @@ mdioport
                         -- check ID0
                         if datout=ID0_MARVELL_OUI then
                             status(0) <= '1' ;
+                            state <= state + 1 ;
                         end if ;
-                        state <= state + 1 ;
                     elsif state=2 then
                         -- read status
                         opcode <= "10" ;

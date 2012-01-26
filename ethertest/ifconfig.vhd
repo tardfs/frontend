@@ -13,7 +13,8 @@ entity ifconfig is
         reset   : in std_logic ;
         clk50   : in std_logic ;
         
-        status  : out std_logic_vector(3 downto 0) ;
+        status  : out std_logic_vector(7 downto 0) ;
+        debug   : out std_logic_vector(15 downto 0) ;
         
         mdc     : out std_logic ;
         mdio    : inout std_logic 
@@ -22,6 +23,10 @@ entity ifconfig is
 end ifconfig ;
 
 architecture ar_ifconfig of ifconfig is
+
+constant OP_READ:  std_logic_vector(1 downto 0) := "10" ;
+constant OP_WRITE: std_logic_vector(1 downto 0) := "01" ;
+
 constant PHY_ADDR: std_logic_vector(4 downto 0) := "10000" ;
 constant REG_ID0: std_logic_vector(4 downto 0)  := "00010" ;
 constant REG_ID1: std_logic_vector(4 downto 0)  := "00011" ;
@@ -122,20 +127,21 @@ mdioport
                 elsif ready='1' and state<10 then
                     if state=0 then
                         -- prepare read Id0
-                        opcode <= "10" ;
+                        opcode  <= OP_READ ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= REG_ID0 ;
-                        start0 <= '1' ;
-                        state <= state + 1 ;
+                        start0  <= '1' ;
+                        state   <= state + 1 ;
                     elsif state=1 then
                         -- check ID0
+                        debug <= datout ;
                         if datout=ID0_MARVELL_OUI then
                             status(0) <= '1' ;
                             state <= state + 1 ;
                         end if ;
                     elsif state=2 then
                         -- read status
-                        opcode <= "10" ;
+                        opcode <= OP_READ ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= MPHY_STATUS_REG ;
                         start0 <= '1' ;
@@ -144,14 +150,14 @@ mdioport
                         if datout(MPHY_SPCFC_STAT_LINK_RT)='1' then
                             -- link is Ok
                             status(1) <= '1' ;
-                            if datout(MPHY_SPCFC_STAT_SPD_10)='1' then
-                                -- link speed is 10Mbps
+                            if datout(MPHY_SPCFC_STAT_SPD_100)='1' then
+                                -- link speed is 100Mbps
                                 status(2) <= '1' ;
                                 state <= 7 ;
                             else
                                 -- link speed is not 10Mbps, re-negotiate
                                 -- 1) read 1000Mbps control register
-                                opcode <= "10" ;
+                                opcode <= OP_READ ;
                                 phyaddr <= PHY_ADDR ;
                                 regaddr <= MPHY_1000BT_CONTROL_REG ;
                                 start0 <= '1' ;
@@ -166,7 +172,7 @@ mdioport
                         data16 := datout ;
                         data16(MPHY_1000BT_CONTROL_ADV_1000BT_FD) := '0' ;
                         data16(MPHY_1000BT_CONTROL_ADV_1000BT_HD) := '0' ;
-                        opcode <= "01" ;
+                        opcode <= OP_WRITE ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= MPHY_1000BT_CONTROL_REG ;
                         datain <= data16 ;
@@ -174,21 +180,21 @@ mdioport
                         state <= state + 1 ;                                
 					elsif state=5 then
                         -- read control register
-                        opcode <= "10" ;
+                        opcode <= OP_READ ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= MPHY_CONTROL_REG ;
                         start0 <= '1' ;
-                        state <= state + 1 ;                        
+                        state <= state + 1 ;
                     elsif state=6 then
                         -- start negotiate
-                        opcode <= "01" ;
+                        opcode <= OP_WRITE ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= MPHY_CONTROL_REG ;
                         data16 := datout ;
                         data16(MPHY_CONTROL_RSTRT_AUTONEG) := '1' ;
                         datain <= data16 ;
                         start0 <= '1' ;
-                        state <= 2 ; -- got to read status                
+                        state <= 2 ; -- go to read status
                     elsif state=7 then
                         -- ok, configuration is done!
                         -- this is final state

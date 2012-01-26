@@ -44,7 +44,8 @@ component ifconfig is
         reset   : in std_logic ;
         clk50   : in std_logic ;
         
-        status  : out std_logic_vector(3 downto 0) ;
+        eth_status  : out std_logic_vector(7 downto 0) ;
+        eth_debug   : out std_logic_vector(15 downto 0) ;
         
         mdc     : out std_logic ;
         mdio    : inout std_logic 
@@ -74,7 +75,8 @@ component etherlink is
 		) ;
 end component etherlink ;
 begin
-ledg(3 downto 0) <= eth_status ;
+ledg(7 downto 0) <= eth_status ;
+ledr(15 downto 0) <= eth_debug ;
 ifconf: ifconfig 
     port map (
         reset => key(0),

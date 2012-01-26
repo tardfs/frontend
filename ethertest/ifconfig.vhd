@@ -93,7 +93,7 @@ signal phyaddr : std_logic_vector(4 downto 0) ;
 signal regaddr : std_logic_vector(4 downto 0) ;
 signal datain  : std_logic_vector(15 downto 0) ;
 signal datout  : std_logic_vector(15 downto 0) ;
-signal ready   : std_logic ;
+signal ready   : std_logic := '0' ;
 signal start0  : std_logic := '0' ;
 
 begin
@@ -116,9 +116,10 @@ mdioport
     variable data16: std_logic_vector(15 downto 0) ;
     begin
         if rising_edge(clk50) then
+				status(7) <= ready ;
             if reset='1' then
                 state <= 0 ;
-                status <= "0000" ;
+                status <= "00000000" ;
             else
                 op_en <= '0' ;
                 if start0='1' then
@@ -127,17 +128,20 @@ mdioport
                 elsif ready='1' and state<10 then
                     if state=0 then
                         -- prepare read Id0
+                        status(0) <= '1' ;
                         opcode  <= OP_READ ;
                         phyaddr <= PHY_ADDR ;
                         regaddr <= REG_ID0 ;
                         start0  <= '1' ;
                         state   <= state + 1 ;
                     elsif state=1 then
+                        status(1) <= '1' ;
                         -- check ID0
                         debug <= datout ;
                         if datout=ID0_MARVELL_OUI then
-                            status(0) <= '1' ;
-                            state <= state + 1 ;
+                           state <= state + 1 ;
+								else
+									state <= 0 ;
                         end if ;
                     elsif state=2 then
                         -- read status

@@ -37,15 +37,17 @@ entity ethertest is
 end ethertest ;
 
 architecture ar_ethertest of ethertest is
-signal eth_status: std_logic_vector(3 downto 0) ;
+signal eth_status: std_logic_vector(7 downto 0) ;
+signal eth_debug: std_logic_vector(15 downto 0) ;
+signal local_reset :std_logic := '0' ;
 component ifconfig is
   port (
         
         reset   : in std_logic ;
         clk50   : in std_logic ;
         
-        eth_status  : out std_logic_vector(7 downto 0) ;
-        eth_debug   : out std_logic_vector(15 downto 0) ;
+        status  : out std_logic_vector(7 downto 0) ;
+        debug   : out std_logic_vector(15 downto 0) ;
         
         mdc     : out std_logic ;
         mdio    : inout std_logic 
@@ -77,17 +79,25 @@ end component etherlink ;
 begin
 ledg(7 downto 0) <= eth_status ;
 ledr(15 downto 0) <= eth_debug ;
+process(clock_50)
+begin
+	if rising_edge(clock_50) then
+		local_reset <= key(0) ;
+	end if ;
+end process ;
+
 ifconf: ifconfig 
     port map (
-        reset => key(0),
+        reset => local_reset,
         clk50 => clock_50,
-        status => eth_status,       
+        status => eth_status,
+		  debug => eth_debug,
         mdc => enet0_mdc,
         mdio => enet0_mdio
         ) ;
 link: etherlink
     port map (
-        reset => key(0),
+        reset => local_reset,
         tx_data => enet0_tx_data,
         gtx_clk => enet0_gtx_clk,
         tx_clk => enet0_tx_clk,

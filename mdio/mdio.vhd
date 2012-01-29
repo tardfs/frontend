@@ -36,6 +36,9 @@ entity mdio is
 end mdio ;
 architecture ar_mdio of mdio is
 component mdioport is
+  generic (
+        phyaddr : std_logic_vector(4 downto 0) := "10000" 
+        ) ;
   port (
         
         clk     : in std_logic ; -- clock
@@ -44,8 +47,7 @@ component mdioport is
         op_en   : in std_logic ; -- enable operation
         
         -- data in/out
-        opcode  : in std_logic_vector(1 downto 0) ;
-        phyaddr : in std_logic_vector(4 downto 0) ;
+        ifread  : in std_logic ;
         regaddr : in std_logic_vector(4 downto 0) ;
         datain  : in std_logic_vector(15 downto 0) ;
         datout  : out std_logic_vector(15 downto 0) ;
@@ -57,5 +59,52 @@ component mdioport is
         
         ) ;
 end component ;
+signal reset: std_logic := '0' ; 
+signal eth_reset: std_logic := '0' ;
+signal counter: std_logic_vector(5 downto 0) := b"000000" ;
+signal mdio_clock: std_logic := '0' ;
+signal op_en : std_logic := '0' ;
+signal ifread : std_logic := '1' ;
+signal regaddr : std_logic_vector(4 downto 0) := b"00010" ;
+signal datain : std_logic_vector(15 downto 0) := b"0000_0000_0000_0000" ;
+signal datout : std_logic_vector(15 downto 0) := b"0000_0000_0000_0000" ;
 begin
+port0:
+mdioport
+    port map (
+        clk => mdio_clock,
+        reset => reset,
+        op_en => op_en,
+        ifread => ifread,
+        regaddr => regaddr,
+        datain => datain,
+        datout => datout,
+        ready => ledg(0),
+        mdc => enet0_mdc,
+        mdio => enet0_mdio        
+    ) ;
+	
+mdio_clock <= counter(5) ;
+ledr(15 downto 0) <= datout ;
+enet0_rst_n <= eth_reset ;
+
+ledg(1) <= reset ;
+ledg(2) <= op_en ;
+
+make_control:process(clock_50)
+begin
+	if rising_edge(clock_50) then
+		reset <= not key(0) ;
+		op_en <= not key(1) ;
+		eth_reset <= key(2) ;
+	end if ;
+end process ;
+
+make_clock:process(clock_50)
+begin
+	if rising_edge(clock_50) then
+		counter <= counter + 1 ;
+	end if ;
+end process ;
+
 end architecture ar_mdio ;

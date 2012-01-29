@@ -9,7 +9,7 @@ use ieee.std_logic_arith.all ;
 
 entity mdioport is
   generic (
-        phyaddr : std_logic_vector(4 downto 0) := "10000" ;
+        phyaddr : std_logic_vector(4 downto 0) := "10000" 
         ) ;
   port (
         
@@ -34,6 +34,7 @@ architecture ar_mdioport of mdioport is
 signal mdo    : std_logic := '1' ;
 signal ena_mdo: std_logic := '0' ; -- mdo enable
 signal mdioreg: std_logic_vector(31 downto 0) ;
+signal rdreg: std_logic_vector(15 downto 0) ;
 signal counter: std_logic_vector(5 downto 0) ;
 type state_type is (StateIdle,StatePreamble,StateData) ;
 signal local_mdc: std_logic:='0' ;
@@ -43,11 +44,14 @@ begin
     mdc <= local_mdc ;
     mdio <= mdo when ena_mdo='1' else 'Z' ;
     process(clk)
+	begin
         if rising_edge(clk) then
             local_mdc <= not local_mdc ;
         end if ;
     end process ;
     process (clk)
+	variable rdvar: std_logic_vector(15 downto 0) ;
+	begin
         if reset='1' then
             mdo <= '1' ;
             ena_mdo <= '1' ;
@@ -57,7 +61,7 @@ begin
             case state is
                 when StateIdle =>
                     if op_en='1' then
-                        counter <= b"00001" ;
+                        counter <= b"000001" ;
                         state <= StatePreamble ;
                         mdo <= '1' ;
                         mdioreg(31 downto 30) <= b"01" ;
@@ -75,34 +79,34 @@ begin
                             counter <= counter + 1 ;
                         else
                             state <= StateData ;
-                            counter <= b"00001" ;
+                            counter <= b"000001" ;
                         end if ;
                     end if ;
                 when StateData =>
-                    -- drive mdo
-                    if local_mdc='1' then
-                        mdo <= mdioreg(31) ;
-                        mdioreg(31 downto 1) <= mdioreg(30 downto 0) ;
-                    end if ;
-                    if local_ifread='1' then
-                        if counter="01110" then
-                            ena_mdo <= '0' ;
-                        end if ;
-                    end if ;
+					if counter(5)='0' then
+						-- drive mdo
+						if local_mdc='1' then
+							mdo <= mdioreg(31) ;
+							mdioreg(31 downto 1) <= mdioreg(30 downto 0) ;
+						end if ;
+						if local_ifread='1' then
+							if counter="01110" then
+								ena_mdo <= '0' ;
+							end if ;
+							if ena_mdo='0' then
+								rdvar := rdreg ;
+								rdvar(15 downto 1) := rdvar(14 downto 0) ;
+								rdvar(0) := mdio ;
+								rdreg <= rdvar ;
+							end if ;
+						end if ;
+						counter <= counter + 1 ;
+					else
+                        mdo <= '1' ;
+						state <= StateIdle ;
+						datout <= rdreg ;
+					end if ;
             end case ;
         end if ;
     end process ;               
-        
-        if counter<32 then
-            mdo <= mdioreg(0) ;
-            counter <= counter + 1 ;
-        else
-            if op_en='1' then
-                mdioreg() <= 
-            end
-        end if ;
-    end if ;
-
-
-    end process ;
 end architecture ar_mdioport ;

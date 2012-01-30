@@ -56,7 +56,7 @@ begin
 	begin
         if reset='1' then
             ena_mdo <= '1' ;
-            mdioreg <= (others => '0') ;
+            mdioreg <= b"01_10_10000_00010_10_0000000000000000" ;
             state <= StateIdle ;
             ready <= '1' ;
         elsif rising_edge(clk) then
@@ -70,14 +70,14 @@ begin
                         ready <= '0' ;
                         
                         --mdioreg(31) <= "01" & ifread & not ifread & phyaddr & regaddr & "10" & datain ;
-                        mdioreg(31 downto 28) <= "01" & ifread & not ifread ;
+                        --mdioreg(31 downto 28) <= "01" & ifread & not ifread ;
 
                         -- databuf(31 downto 30) <= b"01" ;
                         -- databuf(29) <= ifread ;
                         -- databuf(28) <= not ifread ;
                         -- databuf(27 downto 23) <= phyaddr ;
-                        mdioreg(22 downto 18) <= regaddr ;                        
-                        --mdioreg(17 downto 16) <= b"10" ;
+                        -- mdioreg(22 downto 18) <= regaddr ;                        
+                        -- mdioreg(17 downto 16) <= b"10" ;
                         -- databuf(15 downto 0) <= datain ;                                               
                     end if ;
                 when StatePreamble =>

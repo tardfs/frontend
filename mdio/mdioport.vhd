@@ -33,6 +33,7 @@ end mdioport ;
 architecture ar_mdioport of mdioport is
 signal mdo    : std_logic := '1' ;
 signal ena_mdo: std_logic := '0' ; -- mdo enable
+signal databuf: std_logic_vector(31 downto 0) ;
 signal mdioreg: std_logic_vector(31 downto 0) ;
 signal rdreg: std_logic_vector(15 downto 0) ;
 signal counter: std_logic_vector(5 downto 0) ;
@@ -42,6 +43,7 @@ signal local_ifread: std_logic := '0' ;
 signal state: state_type := StateIdle ;
 begin
     mdc <= local_mdc ;
+    mdo <= mdioreg(31) when state=StateData else '1' ;
     mdio <= mdo when ena_mdo='1' else 'Z' ;
     process(clk)
 	begin
@@ -49,29 +51,34 @@ begin
             local_mdc <= not local_mdc ;
         end if ;
     end process ;
-    process (clk)
+    process (reset,clk)
 	variable rdvar: std_logic_vector(15 downto 0) ;
 	begin
         if reset='1' then
-            mdo <= '1' ;
             ena_mdo <= '1' ;
             mdioreg <= (others => '0') ;
             state <= StateIdle ;
+            ready <= '1' ;
         elsif rising_edge(clk) then
             case state is
                 when StateIdle =>
                     if op_en='1' then
+                        ena_mdo <= '1' ;
                         counter <= b"000001" ;
                         state <= StatePreamble ;
-                        mdo <= '1' ;
-                        mdioreg(31 downto 30) <= b"01" ;
-                        mdioreg(29) <= ifread ;
-                        mdioreg(28) <= not ifread ;
-                        mdioreg(27 downto 23) <= phyaddr ;
-                        mdioreg(22 downto 18) <= regaddr ;                        
-                        mdioreg(17 downto 16) <= b"10" ;
-                        mdioreg(15 downto 0) <= datain ;
                         local_ifread <= ifread ;
+                        ready <= '0' ;
+                        
+                        --mdioreg(31) <= "01" & ifread & not ifread & phyaddr & regaddr & "10" & datain ;
+                        mdioreg(31 downto 28) <= "01" & ifread & not ifread ;
+
+                        -- databuf(31 downto 30) <= b"01" ;
+                        -- databuf(29) <= ifread ;
+                        -- databuf(28) <= not ifread ;
+                        -- databuf(27 downto 23) <= phyaddr ;
+                        mdioreg(22 downto 18) <= regaddr ;                        
+                        --mdioreg(17 downto 16) <= b"10" ;
+                        -- databuf(15 downto 0) <= datain ;                                               
                     end if ;
                 when StatePreamble =>
                     if local_mdc='1' then
@@ -86,7 +93,6 @@ begin
 					if counter(5)='0' then
 						-- drive mdo
 						if local_mdc='1' then
-							mdo <= mdioreg(31) ;
 							mdioreg(31 downto 1) <= mdioreg(30 downto 0) ;
 						end if ;
 						if local_ifread='1' then
@@ -94,17 +100,14 @@ begin
 								ena_mdo <= '0' ;
 							end if ;
 							if ena_mdo='0' then
-								rdvar := rdreg ;
-								rdvar(15 downto 1) := rdvar(14 downto 0) ;
-								rdvar(0) := mdio ;
-								rdreg <= rdvar ;
+                                rdreg <= rdreg(14 downto 0) & mdio ;
 							end if ;
 						end if ;
 						counter <= counter + 1 ;
 					else
-                        mdo <= '1' ;
 						state <= StateIdle ;
 						datout <= rdreg ;
+                        ready <= '1' ;
 					end if ;
             end case ;
         end if ;

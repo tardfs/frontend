@@ -48,20 +48,40 @@ x"00",x"1a",x"2d",x"e8",x"00",x"01",x"02",x"03",
 x"04",x"05",x"06",x"07",x"08",x"09",x"0a",x"0b",
 x"0c",x"0d",x"0e",x"0f",x"10",x"11",
 x"e6",x"c5",x"3d",x"b2") ;
-signal address: std_logic_vector(31 downto 0) := x"0000_0000" ;
+signal address: std_logic_vector(31 downto 0) := x"00" ;
 signal start: std_logic := '0' ;
+
+type state_type is (StateIdle,StateHighNibble,StateLowNibble) ;
+signal state: state_type := StateIdle ;
 begin
 enet0_rst_n <= eth_reset ;
-process(enet0_tx_clk)
+eth_rst:process(enet0_tx_clk)
 begin
 	if rising_edge(enet0_tx_clk) then
 		eth_reset <= key(0) ;
-        if address=x"ffffffff" then
-            enet0_tx_en <= '1' ;
-        elsif address<x"48" then
-        elsif address=x"48" then
-        end if ;
-        address <= address + 1 ;
+	end if ;
+end process ;
+state_machine:process(enet0_tx_clk)
+variable tmp_byte: std_logic_vector(7 downto 0) ;
+begin
+	if falling_edge(enet0_tx_clk) then
+        case state is
+            when StateIdle =>
+				if key(1)='1' then
+					state <= StateHighNible ;
+					address <= b"0000_0000" ;
+					enet0_tx_en <= '1' ;
+				end if ;
+			when StateHighNible =>
+				tmp_byte <= eth_frame(address) ;
+				enet0_tx_data <= tmp_byte(7 downto 4) ;
+				state <= StateLowNible ;
+			when  StateLowNible =>
+				tmp_byte <= eth_frame(address) ;
+				enet0_tx_data <= tmp_byte(3 downto 0) ;
+				if 
+				state <= StateLowNible ;
+		end case ;
 	end if ;
 end process ;
 end architecture ar_mdio ;

@@ -54,10 +54,14 @@ signal eth_reset: std_logic := '0' ;
 type state_type is (StateIdle,StateHighNibble,StateLowNibble) ;
 signal state: state_type := StateIdle ;
 begin
+
+enet0_mdio <= '1' ;
+enet0_mdc <= '0' ;
+
 enet0_rst_n <= eth_reset ;
-eth_rst:process(enet0_tx_clk)
+eth_rst:process(clock_50)
 begin
-	if rising_edge(enet0_tx_clk) then
+	if rising_edge(clock_50) then
 		eth_reset <= key(0) ;
 	end if ;
 end process ;

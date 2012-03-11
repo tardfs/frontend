@@ -55,7 +55,7 @@ type state_type is (StateIdle,StateHighNibble,StateLowNibble) ;
 signal state: state_type := StateIdle ;
 begin
 
-enet0_mdio <= '1' ;
+enet0_mdio <= '0' ;
 enet0_mdc <= '0' ;
 
 enet0_rst_n <= eth_reset ;
@@ -69,6 +69,12 @@ state_machine:process(enet0_tx_clk)
 variable tmp_byte: std_logic_vector(7 downto 0) ;
 begin
 	if falling_edge(enet0_tx_clk) then
+			if key(3)='1' then
+				-- syn reset
+					enet0_tx_en <= '0' ;
+					enet0_tx_data <= "0000" ;
+					enet0_gtx_clk <= '0' ;
+			end if ;
         case state is
             when StateIdle =>
 				if key(1)='1' then

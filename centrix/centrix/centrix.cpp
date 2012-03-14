@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+#include "crclib.h"
 unsigned long crc32(unsigned char *buf, int len) ;
 
 
@@ -10,7 +11,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	int k,n, rx_data, rx0, rx1, rx2, rx3, rx_valid ;
 	char* szTmp = new char[1024] ;
 	unsigned char * pBuf = new unsigned char[2048] ;
-	FILE* f = fopen("stp1.csv", "rt") ;
+	FILE* f = fopen("data\\stp2.csv", "rt") ;
 
 	k = 0 ;
 	if (f)
@@ -27,11 +28,11 @@ int _tmain(int argc, _TCHAR* argv[])
 					{
 						if (k%2==0)
 						{
-							pBuf[k/2] = (rx_data << 4)&0xf0 ;
+							pBuf[k/2] = (rx_data&0x0f) ;
 						}
 						else
 						{
-							pBuf[k/2] |= (rx_data&0x0f) ;
+							pBuf[k/2] |= (rx_data << 4)&0xf0 ;
 						}
 						k++ ;
 					}
@@ -58,7 +59,9 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 		}
 		unsigned int crc = crc32(pBuf+8,FrameSize-8-4) ;
-		fprintf(f,"\nframe_size: %4d, crc:%08x\n",FrameSize,~crc) ;
+	    unsigned int crc2 = ComputeCrc(pBuf+8,FrameSize-8-4,0x04c11db7,32,0xffffffff,0xffffffff,1,1,0,1) ;
+
+		fprintf(f,"\nframe_size: %4d, crc: %08x\n",FrameSize,crc) ;
 		fclose(f) ; f = NULL ;
 	}
 	delete pBuf ; pBuf = NULL ;

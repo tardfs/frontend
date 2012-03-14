@@ -12,9 +12,9 @@ unsigned long crc32(unsigned char *buf, int len)
         unsigned char *p;
         unsigned long  crc;
 
-        if (!crc32_table[1])    /* if not already done, */
+        if (!crc32_table[0])    /* if not already done, */
                 init_crc32();   /* build table */
-        crc = 0xffffffff;       /* preload shift register, per CRC-32 spec */
+        crc = 0xffffffff ;       /* preload shift register, per CRC-32 spec */
         for (p = buf; len > 0; ++p, --len)
                 crc = (crc << 8) ^ crc32_table[(crc >> 24) ^ *p];
         return (~crc) ;            /* transmit complement, per CRC-32 spec */

@@ -34,29 +34,45 @@ entity txd is
 		 ) ;
 end txd ;
 architecture ar_txd of txd is
-type frame_type is array (0 to 71) of std_logic_vector(7 downto 0) ;
+type frame_type is array (0 to 331) of std_logic_vector(7 downto 0) ;
 signal eth_frame: frame_type := (
-x"55",x"55",x"55",x"55",x"55",x"55",x"55",
-x"d5",
-x"00",x"10",x"a4",x"7b",x"ea",x"80",
-x"00",x"12",x"34",x"56",x"78",x"90",
-x"08",x"00",
-x"45",x"00",x"00",x"2e",x"b3",x"fe",x"00",x"00",
-x"80",x"11",x"05",x"40",x"c0",x"a8",x"00",x"2c",
-x"c0",x"a8",x"00",x"04",x"04",x"00",x"04",x"00",
-x"00",x"1a",x"2d",x"e8",x"00",x"01",x"02",x"03",
-x"04",x"05",x"06",x"07",x"08",x"09",x"0a",x"0b",
-x"0c",x"0d",x"0e",x"0f",x"10",x"11",
-x"e6",x"c5",x"3d",x"b2") ;
+x"55",x"55",x"55",x"55",x"55",x"55",x"55",x"5d",x"ff",x"ff",x"ff",x"ff",x"ff",x"ff",x"00",x"31",
+x"77",x"03",x"89",x"c5",x"80",x"00",x"54",x"00",x"00",x"ac",x"78",x"ef",x"00",x"00",x"08",x"11",
+x"61",x"51",x"9a",x"ef",x"84",x"31",x"9a",x"ef",x"ff",x"ff",x"00",x"a8",x"00",x"a8",x"00",x"6b",
+x"2e",x"30",x"11",x"20",x"18",x"12",x"9a",x"ef",x"84",x"31",x"00",x"a8",x"00",x"0a",x"00",x"00",
+x"02",x"64",x"44",x"54",x"24",x"54",x"e4",x"64",x"44",x"64",x"64",x"54",x"f4",x"54",x"84",x"64",
+x"34",x"44",x"54",x"44",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"14",
+x"14",x"00",x"02",x"54",x"e4",x"64",x"44",x"54",x"94",x"54",x"05",x"54",x"e4",x"54",x"64",x"34",
+x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",
+x"14",x"24",x"e4",x"00",x"ff",x"35",x"d4",x"24",x"52",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"00",x"00",x"00",x"11",x"00",x"00",x"60",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
+x"00",x"8e",x"30",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"60",x"00",x"65",x"00",x"30",
+x"00",x"10",x"00",x"10",x"00",x"20",x"00",x"71",x"00",x"c5",x"d4",x"14",x"94",x"c4",x"35",x"c4",
+x"f4",x"45",x"c5",x"24",x"25",x"f4",x"75",x"35",x"54",x"00",x"90",x"40",x"30",x"00",x"00",x"00",
+x"4a",x"09",x"f6",x"fb",x"55",x"55",x"55",x"55",x"55",x"55",x"55",x"5d",x"ff",x"ff",x"ff",x"ff",
+x"ff",x"ff",x"00",x"31",x"77",x"03",x"89",x"c5",x"80",x"00",x"54",x"00",x"00",x"e4",x"78",x"ff",
+x"00",x"00",x"08",x"11",x"61",x"09",x"9a",x"ef",x"84",x"31",x"9a",x"ef",x"ff",x"ff",x"00",x"98",
+x"00",x"98",x"00",x"a3",x"76",x"2c",x"18",x"32",x"10",x"01",x"00",x"10",x"00",x"00",x"00",x"00",
+x"00",x"00",x"02",x"54",x"e4",x"64",x"44",x"54",x"94",x"54",x"05",x"54",x"e4",x"54",x"64",x"34",
+x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",
+x"14",x"24",x"c4",x"00",x"00",x"02",x"00",x"10",x"04",x"42",x"1e",x"16"
+) ;
 signal address: integer range 0 to 2047 := 0 ;
 signal start: std_logic := '0' ;
 signal eth_reset: std_logic := '0' ;
-type state_type is (StateIdle,StateHighNibble,StateLowNibble) ;
+type state_type is (StateIdle,StateFirstNibble,StateSecondNibble) ;
 signal state: state_type := StateIdle ;
+constant btn_pressed: std_logic:= '0' ;
+
+signal timer_count:std_logic_vector(25 downto 0) ;
+signal reset_timer:std_logic := '0' ;
+signal timer_expired:std_logic := '0' ;
 begin
 
 enet0_mdio <= '0' ;
 enet0_mdc <= '0' ;
+ledr(0) <= timer_expired ;
 
 enet0_rst_n <= eth_reset ;
 eth_rst:process(clock_50)
@@ -65,11 +81,24 @@ begin
 		eth_reset <= key(0) ;
 	end if ;
 end process ;
+
+timer_expired <= timer_count(timer_count'high) ;
+timer:process(enet0_tx_clk)
+begin
+   if falling_edge(enet0_tx_clk) then
+	   if timer_count(timer_count'high)='0' then
+    	   timer_count <= timer_count+1 ;
+	   elsif reset_timer='1' then 
+		   timer_count <= ext("0",timer_count'length) ;
+		end if ;
+	end if ;
+end process ;
+
 state_machine:process(enet0_tx_clk)
 variable tmp_byte: std_logic_vector(7 downto 0) ;
 begin
 	if falling_edge(enet0_tx_clk) then
-			if key(3)='1' then
+			if key(3)=btn_pressed then
 				-- syn reset
 					enet0_tx_en <= '0' ;
 					enet0_tx_data <= "0000" ;
@@ -77,25 +106,28 @@ begin
 			end if ;
         case state is
             when StateIdle =>
-				if key(1)='1' then
-					state <= StateHighNibble ;
+				if (key(1)=btn_pressed and timer_expired='1') then
+				   reset_timer <= '1' ;
+					state <= StateFirstNibble ;
 					address <= 0 ;
-					enet0_tx_en <= '1' ;
+					enet0_tx_er <= '0' ;
 				end if ;
-			when StateHighNibble =>
+			when StateFirstNibble =>
+			   reset_timer <= '0' ;
+				if address<(eth_frame'length) then
+				   enet0_tx_en <= '1' ;
+				   tmp_byte := eth_frame(address) ;
+				   enet0_tx_data <= tmp_byte(7 downto 4) ;				
+				   state <= StateSecondNibble ;
+				else
+				   enet0_tx_en <= '0' ;
+               state <= StateIdle ;
+			   end if ;	
+			when StateSecondNibble =>
 				tmp_byte := eth_frame(address) ;
-				enet0_tx_data <= tmp_byte(7 downto 4) ;
-				state <= StateLowNibble ;
-			when StateLowNibble =>
-				tmp_byte := eth_frame(address) ;
-				enet0_tx_data <= tmp_byte(3 downto 0) ;
-				if address<=eth_frame'length then
-                    address <= address + 1 ;
-                    state <= StateHighNibble ;
-                else
-					enet0_tx_en <= '0' ;
-                    state <= StateIdle ;
-                end if ;
+				enet0_tx_data <= tmp_byte(3 downto 0) ;				
+            address <= address + 1 ;
+            state <= StateFirstNibble ;
 		end case ;
 	end if ;
 end process ;

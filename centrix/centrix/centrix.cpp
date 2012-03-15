@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "crclib.h"
 unsigned long crc32(unsigned char *buf, int len) ;
-
+unsigned int crc322(unsigned char *data, int len) ;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -44,6 +44,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	else
 	{
 		printf("can't open file\n") ;
+		return (-1) ;
 	}
 	delete szTmp ; szTmp = NULL ;
 	f = fopen("frame.txt","w+t") ;
@@ -53,16 +54,25 @@ int _tmain(int argc, _TCHAR* argv[])
 		for (n=0;n<FrameSize;n++)
 		{
 			fprintf(f,"x\"%02x\",",pBuf[n]) ;
+			printf("x\"%02x\",",pBuf[n]) ;
 			if ((n+1)%16==0)
 			{
 				fprintf(f,"\n") ;
+				printf("\n") ;
 			}
 		}
-		unsigned int crc = crc32(pBuf+8,FrameSize-8-4) ;
-	    unsigned int crc2 = ComputeCrc(pBuf+8,FrameSize-8-4,0x04c11db7,32,0xffffffff,0xffffffff,1,1,0,1) ;
+		unsigned int crc = crc322(pBuf+8,FrameSize-8-4) ;
 
 		fprintf(f,"\nframe_size: %4d, crc: %08x\n",FrameSize,crc) ;
 		fclose(f) ; f = NULL ;
+		printf("\nframe_size: %4d\ncrc: %08x\n\n",FrameSize,crc) ;
+
+		for (unsigned char c=0;c<16;c++)
+		{
+	    unsigned int crc2 = ComputeCrc(pBuf+8,FrameSize-8-4,
+			                  0x04c11db7,32,0xffffffff,0x0,(c>>3)&0x01,(c>>2)&0x01,(c>>1)&0x01,c&1) ;
+		printf("crc: %08x\n", crc2) ;
+		}
 	}
 	delete pBuf ; pBuf = NULL ;
 	return (0) ;

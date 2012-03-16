@@ -34,29 +34,16 @@ entity txd is
 		 ) ;
 end txd ;
 architecture ar_txd of txd is
-type frame_type is array (0 to 331) of std_logic_vector(7 downto 0) ;
+type frame_type is array (0 to 121) of std_logic_vector(7 downto 0) ;
 signal eth_frame: frame_type := (
-x"55",x"55",x"55",x"55",x"55",x"55",x"55",x"5d",x"ff",x"ff",x"ff",x"ff",x"ff",x"ff",x"00",x"31",
-x"77",x"03",x"89",x"c5",x"80",x"00",x"54",x"00",x"00",x"ac",x"78",x"ef",x"00",x"00",x"08",x"11",
-x"61",x"51",x"9a",x"ef",x"84",x"31",x"9a",x"ef",x"ff",x"ff",x"00",x"a8",x"00",x"a8",x"00",x"6b",
-x"2e",x"30",x"11",x"20",x"18",x"12",x"9a",x"ef",x"84",x"31",x"00",x"a8",x"00",x"0a",x"00",x"00",
-x"02",x"64",x"44",x"54",x"24",x"54",x"e4",x"64",x"44",x"64",x"64",x"54",x"f4",x"54",x"84",x"64",
-x"34",x"44",x"54",x"44",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"14",
-x"14",x"00",x"02",x"54",x"e4",x"64",x"44",x"54",x"94",x"54",x"05",x"54",x"e4",x"54",x"64",x"34",
-x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",
-x"14",x"24",x"e4",x"00",x"ff",x"35",x"d4",x"24",x"52",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
-x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
-x"00",x"00",x"00",x"00",x"11",x"00",x"00",x"60",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",
-x"00",x"8e",x"30",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"00",x"60",x"00",x"65",x"00",x"30",
-x"00",x"10",x"00",x"10",x"00",x"20",x"00",x"71",x"00",x"c5",x"d4",x"14",x"94",x"c4",x"35",x"c4",
-x"f4",x"45",x"c5",x"24",x"25",x"f4",x"75",x"35",x"54",x"00",x"90",x"40",x"30",x"00",x"00",x"00",
-x"4a",x"09",x"f6",x"fb",x"55",x"55",x"55",x"55",x"55",x"55",x"55",x"5d",x"ff",x"ff",x"ff",x"ff",
-x"ff",x"ff",x"00",x"31",x"77",x"03",x"89",x"c5",x"80",x"00",x"54",x"00",x"00",x"e4",x"78",x"ff",
-x"00",x"00",x"08",x"11",x"61",x"09",x"9a",x"ef",x"84",x"31",x"9a",x"ef",x"ff",x"ff",x"00",x"98",
-x"00",x"98",x"00",x"a3",x"76",x"2c",x"18",x"32",x"10",x"01",x"00",x"10",x"00",x"00",x"00",x"00",
-x"00",x"00",x"02",x"54",x"e4",x"64",x"44",x"54",x"94",x"54",x"05",x"54",x"e4",x"54",x"64",x"34",
-x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",x"14",x"34",
-x"14",x"24",x"c4",x"00",x"00",x"02",x"00",x"10",x"04",x"42",x"1e",x"16"
+x"55",x"55",x"55",x"55",x"55",x"55",x"55",x"d5",x"ff",x"ff",x"ff",x"ff",x"ff",x"ff",x"00",x"24",
+x"54",x"cc",x"f8",x"af",x"08",x"00",x"45",x"00",x"00",x"60",x"00",x"6d",x"00",x"00",x"80",x"11",
+x"1e",x"58",x"a9",x"fe",x"c7",x"cb",x"a9",x"fe",x"ff",x"ff",x"00",x"89",x"00",x"89",x"00",x"4c",
+x"b6",x"d6",x"bb",x"44",x"29",x"10",x"00",x"01",x"00",x"00",x"00",x"00",x"00",x"01",x"20",x"46",
+x"48",x"45",x"50",x"46",x"43",x"45",x"4c",x"45",x"48",x"46",x"43",x"45",x"50",x"46",x"46",x"46",
+x"41",x"43",x"41",x"43",x"41",x"43",x"41",x"43",x"41",x"43",x"41",x"43",x"41",x"42",x"4e",x"00",
+x"00",x"20",x"00",x"01",x"c0",x"0c",x"00",x"20",x"00",x"01",x"00",x"04",x"93",x"e0",x"00",x"06",
+x"00",x"00",x"a9",x"fe",x"c7",x"cb",x"4a",x"78",x"04",x"aa"
 ) ;
 signal address: integer range 0 to 2047 := 0 ;
 signal start: std_logic := '0' ;
@@ -117,7 +104,7 @@ begin
 				if address<(eth_frame'length) then
 				   enet0_tx_en <= '1' ;
 				   tmp_byte := eth_frame(address) ;
-				   enet0_tx_data <= tmp_byte(7 downto 4) ;				
+				   enet0_tx_data <= tmp_byte(3 downto 0) ;				
 				   state <= StateSecondNibble ;
 				else
 				   enet0_tx_en <= '0' ;
@@ -125,7 +112,7 @@ begin
 			   end if ;	
 			when StateSecondNibble =>
 				tmp_byte := eth_frame(address) ;
-				enet0_tx_data <= tmp_byte(3 downto 0) ;				
+				enet0_tx_data <= tmp_byte(7 downto 4) ;				
             address <= address + 1 ;
             state <= StateFirstNibble ;
 		end case ;

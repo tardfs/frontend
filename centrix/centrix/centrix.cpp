@@ -67,14 +67,19 @@ int _tmain(int argc, _TCHAR* argv[])
 		fclose(f) ; f = NULL ;
 		printf("\nframe_size: %4d\ncrc: %08x\n\n",FrameSize,crc) ;
 
-		for (unsigned char c=0;c<16;c++)
-		{
 	    unsigned int crc2 = ComputeCrc(pBuf+8,FrameSize-8-4,
-			                  0x04c11db7,32,0xffffffff,0x0,(c>>3)&0x01,(c>>2)&0x01,(c>>1)&0x01,c&1) ;
+			                  0x04c11db7,32,0xffffffff,0x0,1,1,0,0) ;
 		printf("crc: %08x\n", crc2) ;
-		}
 	}
 	delete pBuf ; pBuf = NULL ;
+
+	unsigned char ethaddr_dst[] = {0xff,0xff,0xff,0xff,0xff,0xff} ;
+	unsigned char ethaddr_src[] = {0x00,0x24,0x54,0xcc,0xf8,0xae} ;
+	memset(pBuf,0x55,7) ;
+	pBuf[7] = 0xd5 ;
+	memcpy(pBuf+8, ethaddr_dst, 6 ) ;
+	memcpy(pBuf+14, ethaddr_src, 6 ) ;
+
 	return (0) ;
 }
 

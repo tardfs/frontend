@@ -1,4 +1,4 @@
-<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP3C120/EP4CE115 (0x020F70DD)" sof_file="">
+<session jtag_chain="" jtag_device="" sof_file="">
   <display_tree gui_logging_enabled="0">
     <display_branch instance="auto_signaltap_0" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
@@ -15,65 +15,75 @@
       <single attribute="zoom offset denominator" value="1"/>
       <single attribute="zoom offset numerator" value="129024"/>
     </position_info>
-    <signal_set global_temp="1" name="signal_set: 2012/03/13 19:40:32  #0">
-      <clock name="enet0_rx_clk" polarity="posedge" tap_mode="classic"/>
+    <signal_set global_temp="1" name="signal_set: 2012/03/15 20:55:49  #0">
+      <clock name="clock_50" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="2048" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
       <signal_vec>
         <trigger_input_vec>
-          <wire name="enet0_rx_data[0]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[1]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[2]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[3]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_dv" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_rx_crs" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_clk" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_data[0]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[1]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[2]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[3]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_en" tap_mode="classic" type="output pin"/>
         </trigger_input_vec>
         <data_input_vec>
-          <wire name="enet0_rx_data[0]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[1]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[2]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[3]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_dv" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_rx_crs" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_clk" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_data[0]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[1]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[2]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[3]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_en" tap_mode="classic" type="output pin"/>
         </data_input_vec>
         <storage_qualifier_input_vec>
-          <wire name="enet0_rx_data[0]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[1]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[2]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_data[3]" tap_mode="classic" type="input pin"/>
-          <wire name="enet0_rx_dv" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_rx_crs" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_clk" tap_mode="classic" type="input pin"/>
+          <wire name="enet0_tx_data[0]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[1]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[2]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_data[3]" tap_mode="classic" type="output pin"/>
+          <wire name="enet0_tx_en" tap_mode="classic" type="output pin"/>
         </storage_qualifier_input_vec>
       </signal_vec>
       <presentation>
         <data_view>
-          <bus is_signal_inverted="no" link="all" name="enet0_rx_data" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="enet0_rx_data[3]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[2]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[1]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[0]"/>
+          <net is_signal_inverted="no" name="enet0_tx_en"/>
+          <bus is_signal_inverted="no" link="all" name="enet0_tx_data" order="msb_to_lsb" radix="hex" state="collapse" type="output pin">
+            <net is_signal_inverted="no" name="enet0_tx_data[3]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[2]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[1]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[0]"/>
           </bus>
-          <net is_signal_inverted="no" name="enet0_rx_dv"/>
+          <net is_signal_inverted="no" name="enet0_tx_clk"/>
+          <net is_signal_inverted="no" name="enet0_rx_crs"/>
         </data_view>
         <setup_view>
-          <bus is_signal_inverted="no" link="all" name="enet0_rx_data" order="msb_to_lsb" radix="hex" state="collapse" type="input pin">
-            <net is_signal_inverted="no" name="enet0_rx_data[3]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[2]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[1]"/>
-            <net is_signal_inverted="no" name="enet0_rx_data[0]"/>
+          <net is_signal_inverted="no" name="enet0_tx_en"/>
+          <bus is_signal_inverted="no" link="all" name="enet0_tx_data" order="msb_to_lsb" radix="hex" state="collapse" type="output pin">
+            <net is_signal_inverted="no" name="enet0_tx_data[3]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[2]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[1]"/>
+            <net is_signal_inverted="no" name="enet0_tx_data[0]"/>
           </bus>
-          <net is_signal_inverted="no" name="enet0_rx_dv"/>
+          <net is_signal_inverted="no" name="enet0_tx_clk"/>
+          <net is_signal_inverted="no" name="enet0_rx_crs"/>
         </setup_view>
       </presentation>
-      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/03/13 19:40:32  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="512" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2012/03/15 20:55:49  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="512" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
-          <level enabled="yes" name="condition1" type="basic">'enet0_rx_dv' == rising edge
+          <level enabled="yes" name="condition1" type="basic">'enet0_tx_en' == rising edge
             <power_up enabled="yes">
             </power_up>
             <op_node/>
           </level>
         </events>
         <storage_qualifier_events>
-          <transitional>00000
-            <pwr_up_transitional>00000</pwr_up_transitional>
+          <transitional>0000000
+            <pwr_up_transitional>0000000</pwr_up_transitional>
           </transitional>
           <storage_qualifier_level type="basic">
             <power_up>
@@ -104,7 +114,7 @@
     <single attribute="hierarchy widget visible" value="1"/>
     <single attribute="instance widget visible" value="1"/>
     <single attribute="jtag widget visible" value="1"/>
-    <multi attribute="frame size" size="2" value="1280,744"/>
+    <multi attribute="frame size" size="2" value="1173,654"/>
     <multi attribute="jtag widget size" size="2" value="523,120"/>
   </global_info>
 </session>

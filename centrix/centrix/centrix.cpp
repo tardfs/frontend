@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "crclib.h"
+#include "mac.h"
 unsigned long crc32(unsigned char *buf, int len) ;
 unsigned int crc322(unsigned char *data, int len) ;
 
@@ -71,14 +72,19 @@ int _tmain(int argc, _TCHAR* argv[])
 			                  0x04c11db7,32,0xffffffff,0x0,1,1,0,0) ;
 		printf("crc: %08x\n", crc2) ;
 	}
-	delete pBuf ; pBuf = NULL ;
 
-	unsigned char ethaddr_dst[] = {0xff,0xff,0xff,0xff,0xff,0xff} ;
-	unsigned char ethaddr_src[] = {0x00,0x24,0x54,0xcc,0xf8,0xae} ;
-	memset(pBuf,0x55,7) ;
-	pBuf[7] = 0xd5 ;
-	memcpy(pBuf+8, ethaddr_dst, 6 ) ;
-	memcpy(pBuf+14, ethaddr_src, 6 ) ;
+	byte8* pData = new byte8[100] ;
+	memset(pData,0,100) ;
+	int len = make_udp_frame(pBuf,pData,70) ;
+	f = fopen("udp.txt","w+t") ;
+	if (f)
+	{
+		fprintf(f,"len=%d\n",len) ;
+		dump_to_file(f,pBuf,len) ;
+		fclose(f) ; f = NULL ;
+	}
+	delete pData ; pData = NULL ;
+	delete pBuf ; pBuf = NULL ;
 
 	return (0) ;
 }

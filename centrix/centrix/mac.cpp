@@ -6,6 +6,11 @@ unsigned char ethaddr_src[] = {0x00,0x24,0x54,0xcc,0xf8,0xae} ;
 word32 ipaddr_dst = 0x0b01a8c0 ;
 word32 ipaddr_src = 0x0a01a8c0 ;
 
+word16 mac_htons(word16 data16)
+{
+	return ( ((data16&0xff)<<8) | ((data16>>8)&0xff)) ;
+}
+
 int make_udp_frame(byte8* pBuf,byte8* pdata, int data_size)
 {
 	memset(pBuf,0x55,7) ;
@@ -16,8 +21,8 @@ int make_udp_frame(byte8* pBuf,byte8* pdata, int data_size)
 	pBuf[21] = 0x00 ;
 	ipv4* ip = (ipv4*) (pBuf + 22) ;
 	ip->tos = 0x0045 ;
-	ip->len = sizeof(ipv4)+sizeof(udp)+data_size ;
-	ip->id = 1065 ;
+	ip->len = mac_htons( sizeof(ipv4)+sizeof(udp)+data_size ) ;
+	ip->id = mac_htons(1065) ;
 	ip->offset = 0 ;
 	ip->ttl = 128 ;
 	ip->proto = 17 ; /* UDP */
@@ -26,9 +31,9 @@ int make_udp_frame(byte8* pBuf,byte8* pdata, int data_size)
 	ip->crc16 = 0 ;
 	ip->crc16 = ipcsum((word16*)ip,sizeof(ipv4)/sizeof(word16)) ;
 	udp* pudp = (udp*) (ip+1) ;
-	pudp->dst_port = 1025 ;
-	pudp->src_port = 1025 ;
-	pudp->len = 0 ;
+	pudp->dst_port = mac_htons(1025) ;
+	pudp->src_port = mac_htons(1025) ;
+	pudp->len = mac_htons(sizeof(udp) + data_size) ;
 	pudp->crc16 = 0x0000 ;
 	memcpy(pudp+1,pdata,data_size) ;
 	int frame_payload = 14+sizeof(ipv4)+sizeof(udp)+data_size ;

@@ -4,7 +4,9 @@
 
 SOCKET  s ;
 unsigned char rxBuf[2048] ;
+//WSAEMSGSIZE
 
+void dump_bytes(unsigned char* pBuf, int len) ;
 int _tmain(int argc, _TCHAR* argv[])
 {
 	WSADATA wsd ;
@@ -34,13 +36,16 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	while(!kbhit())
 	{
+		int ret = 0 ;
 		sockaddr_in peer ;
-		int peerlen ;
-		if (recvfrom(s, (char*)rxBuf, 100, 0, (sockaddr*)&peer, &peerlen)<0)
+		int peerlen = sizeof(sockaddr_in) ;
+		if ((ret=recvfrom(s, (char*)rxBuf, 2048, 0, (sockaddr*)&peer, &peerlen))<0)
 		{ 
-			printf("error recvfrom()\n") ;
+			printf("error recvfrom(): %08d\n",WSAGetLastError()) ;
+			break ;
 		}
-		dump_bytes(rxBuf,100) ;
+		printf("%d bytes received:\n", ret ) ;
+		dump_bytes(rxBuf,ret) ;
 	}
 
     closesocket(s) ;
@@ -52,70 +57,12 @@ void dump_bytes(unsigned char* pBuf, int len)
 {
 	for (int n=0;n<len;n++)
 	{
-		printf("x\"%02x\",",pBuf[n]) ;
+		printf("%02x ",pBuf[n]) ;
 		if ((n+1)%16==0)
 		{
 			printf("\n") ;
 		}
 	}
+	printf("\n") ;
 }
 
-
-/*
-	DWORD dwThreadId = 0 ;
-    HANDLE hThread = CreateThread(NULL,0,CompletionRoutine,NULL,0,&dwThreadId) ;
-
-int exit_req = 0 ;
-DWORD WINAPI CompletionRoutine(LPVOID) ;
-DWORD WINAPI CompletionRoutine(LPVOID Context)
-HANDLE  hCompletionEvent ;
-	hCompletionEvent = WSACreateEvent() ;
-	WSAEventSelect(s,hCompletionEvent, FD_READ|FD_WRITE|FD_CLOSE ) ; 
-{
-	printf("start completion thread\n") ;
-	while(!exit_req)
-	{
-        WSAWaitForMultipleEvents(
-            1,
-            &hCompletionEvent,
-            FALSE,
-            WSA_INFINITE,
-            TRUE
-            ) ;
-		if (exit_req)
-		{
-			break ;
-		}
-		while (true)
-		{
-			WSANETWORKEVENTS ne ;
-			WSAEnumNetworkEvents ( s, hCompletionEvent, &ne ) ;
-			if (ne.lNetworkEvents==0)
-			{
-				// no more events
-				break ;
-			}
-			if (ne.lNetworkEvents&FD_READ)
-			{
-                    int ret = 0 ;
-                    while((ret=recv(s,(char*)rxBuf,2048,0))
-                        ==SOCKET_ERROR)
-                    {
-                        if (WSAGetLastError()==WSAEMSGSIZE)
-                        {
-                            OnReceiveData(rxBuf,2048) ;
-                        }
-                        else
-                        {
-                            break ;
-                        }
-                    }
-                    if (ret>0)
-                    {
-                        OnReceiveData(rxBuf,ret) ;
-                    }
-			}
-		}
-	}
-}
-*/

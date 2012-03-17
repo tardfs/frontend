@@ -1,8 +1,8 @@
 #include "StdAfx.h"
 #include "mac.h"
 
-unsigned char ethaddr_dst[] = {0xff,0xff,0xff,0xff,0xff,0xff} ;
-unsigned char ethaddr_src[] = {0x00,0x24,0x54,0xcc,0xf8,0xae} ;
+unsigned char ethaddr_dst[] = {0x00,0x24,0x54,0xcc,0xf8,0xaf} ;
+unsigned char ethaddr_src[] = {0x00,0x24,0x54,0xc0,0xf8,0xae} ;
 word32 ipaddr_dst = 0x0b01a8c0 ;
 word32 ipaddr_src = 0x0a01a8c0 ;
 
@@ -31,8 +31,8 @@ int make_udp_frame(byte8* pBuf,byte8* pdata, int data_size)
 	ip->crc16 = 0 ;
 	ip->crc16 = ipcsum((word16*)ip,sizeof(ipv4)/sizeof(word16)) ;
 	udp* pudp = (udp*) (ip+1) ;
-	pudp->dst_port = mac_htons(1025) ;
-	pudp->src_port = mac_htons(1025) ;
+	pudp->dst_port = mac_htons(0xc000) ;
+	pudp->src_port = mac_htons(0xc000) ;
 	pudp->len = mac_htons(sizeof(udp) + data_size) ;
 	pudp->crc16 = 0x0000 ;
 	memcpy(pudp+1,pdata,data_size) ;

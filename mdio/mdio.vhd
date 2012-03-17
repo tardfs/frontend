@@ -69,20 +69,20 @@ signal regaddr : std_logic_vector(4 downto 0) := b"00010" ;
 signal datain : std_logic_vector(15 downto 0) := b"0000_0000_0000_0000" ;
 signal datout : std_logic_vector(15 downto 0) := b"0000_0000_0000_0000" ;
 begin
-port0:
-mdioport
-    port map (
-        clk => mdio_clock,
-        reset => reset,
-        op_en => op_en,
-        ifread => ifread,
-        regaddr => regaddr,
-        datain => datain,
-        datout => datout,
-        ready => ledg(0),
-        mdc => enet0_mdc,
-        mdio => enet0_mdio        
-    ) ;
+--port0:
+--mdioport
+--    port map (
+--        clk => mdio_clock,
+--        reset => reset,
+--        op_en => op_en,
+--        ifread => ifread,
+--        regaddr => regaddr,
+--        datain => datain,
+--        datout => datout,
+--        ready => ledg(0),
+--        mdc => enet0_mdc,
+--        mdio => enet0_mdio        
+--    ) ;
 	
 mdio_clock <= counter(5) ;
 ledr(15 downto 0) <= datout ;

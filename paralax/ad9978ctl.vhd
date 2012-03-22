@@ -86,6 +86,7 @@ begin
             cmd <= cmd_mem(cmd_addr) ;
             count <= conv_std_logic_vector(cmd_timings(cmd_addr),16) ;
             state <= StateExec ;
+            cmd_addr <= cmd_addr + 1 ;
          else
             state <= StateIdle ;
          end if ;

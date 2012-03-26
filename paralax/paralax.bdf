@@ -34,11 +34,11 @@ applicable agreement for further details.
 		(line (pt 109 12)(pt 113 8))
 	)
 	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect -288 128 -184 168))
+	(annotation_block (location)(rect -296 136 -192 176))
 )
 (pin
 	(input)
-	(rect -288 8 -120 24)
+	(rect -288 -40 -120 -24)
 	(text "INPUT" (rect 125 0 153 10)(font "Arial" (font_size 6)))
 	(text "key[0]" (rect 5 0 36 12)(font "Arial" ))
 	(pt 168 8)
@@ -51,7 +51,7 @@ applicable agreement for further details.
 		(line (pt 109 12)(pt 113 8))
 	)
 	(text "VCC" (rect 128 7 148 17)(font "Arial" (font_size 6)))
-	(annotation_block (location)(rect -288 24 -192 64))
+	(annotation_block (location)(rect -296 -16 -200 24))
 )
 (pin
 	(output)
@@ -105,7 +105,7 @@ applicable agreement for further details.
 	(annotation_block (location)(rect 664 80 792 112))
 )
 (symbol
-	(rect -72 88 56 184)
+	(rect -64 88 64 184)
 	(text "ref0" (rect 5 0 25 12)(font "Arial" ))
 	(text "inst4" (rect 8 80 31 92)(font "Arial" ))
 	(port
@@ -198,7 +198,7 @@ applicable agreement for further details.
 	)
 )
 (symbol
-	(rect -72 -16 80 80)
+	(rect -72 -64 80 32)
 	(text "res0" (rect 5 0 26 12)(font "Arial" ))
 	(text "inst2" (rect 8 80 31 92)(font "Arial" ))
 	(port
@@ -235,32 +235,12 @@ applicable agreement for further details.
 	(pt 464 88)
 )
 (connector
-	(pt -72 16)
-	(pt -120 16)
-)
-(connector
-	(pt 80 16)
-	(pt 200 16)
-)
-(connector
-	(pt 200 56)
-	(pt 200 16)
-)
-(connector
 	(pt 200 56)
 	(pt 240 56)
 )
 (connector
-	(pt 200 136)
-	(pt 56 136)
-)
-(connector
 	(pt 200 72)
 	(pt 200 136)
-)
-(connector
-	(pt -120 120)
-	(pt -72 120)
 )
 (connector
 	(pt 392 56)
@@ -286,3 +266,44 @@ applicable agreement for further details.
 	(pt 464 136)
 	(pt 616 136)
 )
+(connector
+	(pt 200 -32)
+	(pt 80 -32)
+)
+(connector
+	(pt 200 56)
+	(pt 200 -32)
+)
+(connector
+	(pt -120 -32)
+	(pt -72 -32)
+)
+(connector
+	(pt -72 -16)
+	(pt -104 -16)
+)
+(connector
+	(pt -104 -16)
+	(pt -104 56)
+)
+(connector
+	(pt -104 56)
+	(pt 120 56)
+)
+(connector
+	(pt 120 56)
+	(pt 120 136)
+)
+(connector
+	(pt 64 136)
+	(pt 120 136)
+)
+(connector
+	(pt 120 136)
+	(pt 200 136)
+)
+(connector
+	(pt -120 120)
+	(pt -64 120)
+)
+(junction (pt 120 136))

@@ -39,7 +39,7 @@ begin
             state <= StateTrx ;
          end if ;
        when StateTrx => 
-         if count<23 then
+         if count<24 then
             sl <= '0' ; 
             sdata <= datareg(0) ;
             datareg <= '0' & datareg(23 downto 1) ;

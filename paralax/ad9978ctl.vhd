@@ -35,7 +35,7 @@ end component ;
 type cmd_mem_type is array (0 to 8) of std_logic_vector(23 downto 0) ;
 signal cmd_mem: cmd_mem_type := 
 (
-  b"01010000_000000000001_1111", -- write 1 to 0x50 (software reset)
+  b"1111_000000000001_01010000", -- write 1 to 0x50 (software reset)
   b"01000001_000100000000_1111", -- write 0x80 to 0x41
   b"01001110_010000000000_1111", -- write 0x40 to bits 11:4 of 0x4E
   b"01001111_010000000000_1111", -- write 0x80 to bits 11:3 of 0x4F
@@ -48,12 +48,12 @@ signal cmd_mem: cmd_mem_type :=
 type cmd_timings_type is array (0 to 8) of integer range 0 to 2048 ;
 signal cmd_timings: cmd_timings_type :=  -- x20ns
 (
-10, 150, 100, 100, 100, 100, 100, 100, 100
+32, 150, 100, 100, 100, 100, 100, 100, 100
 ) ;
 signal cmd_addr : integer range 0 to 255 := 0 ; 
 type state_type is (StateReadCmd,StateExec,StateWait,StateIdle) ;
 signal state: state_type := StateIdle ;
-signal count: std_logic_vector(15 downto 0) ;
+signal count: integer range 0 to 16367 ;
 signal cmd: std_logic_vector(23 downto 0) ;
 signal wr: std_logic := '0' ;
 
@@ -74,7 +74,7 @@ process(clk)
 begin
    if reset='1' then 
       state <= StateWait ;
-      count <= x"0010" ;
+      count <= 10 ;
       cmd_addr <= 0 ;
       init_done <= '0' ;
       wr <= '0' ;
@@ -84,7 +84,7 @@ begin
          wr <= '0' ;
          if cmd_addr<cmd_mem'length then
             cmd <= cmd_mem(cmd_addr) ;
-            count <= conv_std_logic_vector(cmd_timings(cmd_addr),16) ;
+            count <= cmd_timings(cmd_addr) ;
             state <= StateExec ;
             cmd_addr <= cmd_addr + 1 ;
          else
@@ -95,7 +95,7 @@ begin
          state <= StateWait ;
       when StateWait =>
          wr <= '0' ;
-         if count/=x"0000" then
+         if count>0 then
             count <= count - 1 ;
          else
             state <= StateReadCmd ;

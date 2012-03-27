@@ -33,22 +33,23 @@ component ad9978port
 end component ;
 
 type cmd_mem_type is array (0 to 8) of std_logic_vector(23 downto 0) ;
-signal cmd_mem: cmd_mem_type := 
+constant cmd_mem: cmd_mem_type := 
 (
   b"1111_000000000001_01010000", -- write 1 to 0x50 (software reset)
-  b"01000001_000100000000_1111", -- write 0x80 to 0x41
-  b"01001110_010000000000_1111", -- write 0x40 to bits 11:4 of 0x4E
-  b"01001111_010000000000_1111", -- write 0x80 to bits 11:3 of 0x4F
-  b"11101001_000001100000_1111", -- write 0x60 to 0xE9
+  b"1111_000100000000_01000001", -- write 0x100 to 0x41 (startup1)
+  b"1111_010000000000_01001110", -- write 0x40 to bits 11:4 of 0x4E (startup2)
+  b"1111_010000000000_01001111", -- write 0x80 to bits 11:3 of 0x4F (startup3)
+  b"1111_000001100000_11101001", -- write 0x60 to 0xE9 (startup4)
+  
   b"01000001_000100000010_1111", -- write 0x82 to 0x41
   b"00000000_000000000000_1111",
   b"00000000_000000000000_1111",
   b"00000000_000000000000_1111"
 ) ;
 type cmd_timings_type is array (0 to 8) of integer range 0 to 2048 ;
-signal cmd_timings: cmd_timings_type :=  -- x20ns
+constant cmd_timings: cmd_timings_type :=  -- x20ns
 (
-32, 150, 100, 100, 100, 100, 100, 100, 100
+32, 32, 32, 32, 100, 100, 100, 100, 100
 ) ;
 signal cmd_addr : integer range 0 to 255 := 0 ; 
 type state_type is (StateReadCmd,StateExec,StateWait,StateIdle) ;

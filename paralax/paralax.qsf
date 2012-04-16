@@ -6,7 +6,7 @@ set_global_assignment -name FAMILY "Cyclone IV E"
 set_global_assignment -name DEVICE EP4CE115F29C7
 set_global_assignment -name TOP_LEVEL_ENTITY "paralax"
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION "9.1"
-set_global_assignment -name LAST_QUARTUS_VERSION "11.1 SP1"
+set_global_assignment -name LAST_QUARTUS_VERSION "11.0 SP1"
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "21:59:17 MARCH 19,2012"
 set_global_assignment -name DEVICE_FILTER_PACKAGE FPGA
 set_global_assignment -name DEVICE_FILTER_PIN_COUNT 780
@@ -358,7 +358,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[2]
 set_location_assignment PIN_Y17 -to GPIO[3]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[3]
 set_location_assignment PIN_AC21 -to GPIO[4]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[4]
+set_instance_assignment -name IO_STANDARD LVDS -to GPIO[4]
 set_location_assignment PIN_Y16 -to GPIO[5]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[5]
 set_location_assignment PIN_AD21 -to GPIO[6]
@@ -370,7 +370,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[8]
 set_location_assignment PIN_AE15 -to GPIO[9]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[9]
 set_location_assignment PIN_AC19 -to GPIO[10]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[10]
+set_instance_assignment -name IO_STANDARD LVDS -to GPIO[10]
 set_location_assignment PIN_AF16 -to GPIO[11]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[11]
 set_location_assignment PIN_AD19 -to GPIO[12]
@@ -386,7 +386,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[16]
 set_location_assignment PIN_AC22 -to GPIO[17]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[17]
 set_location_assignment PIN_AE22 -to GPIO[18]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[18]
+set_instance_assignment -name IO_STANDARD LVDS -to GPIO[18]
 set_location_assignment PIN_AF21 -to GPIO[19]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[19]
 set_location_assignment PIN_AF22 -to GPIO[20]
@@ -394,7 +394,7 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[20]
 set_location_assignment PIN_AD22 -to GPIO[21]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[21]
 set_location_assignment PIN_AG25 -to GPIO[22]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[22]
+set_instance_assignment -name IO_STANDARD LVDS -to GPIO[22]
 set_location_assignment PIN_AD25 -to GPIO[23]
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to GPIO[23]
 set_location_assignment PIN_AH25 -to GPIO[24]
@@ -512,4 +512,11 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=00
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=100" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=2380" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=37026" -section_id auto_signaltap_0
+set_global_assignment -name VHDL_FILE hvsync.vhd
+set_global_assignment -name QIP_FILE altlvds_rx0.qip
+set_location_assignment PIN_AH25 -to "GPIO[22](n)"
+set_location_assignment PIN_AF22 -to "GPIO[18](n)"
+set_location_assignment PIN_AD19 -to "GPIO[10](n)"
+set_location_assignment PIN_AD21 -to "GPIO[4](n)"
+set_global_assignment -name VHDL_FILE dataport.vhd
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top

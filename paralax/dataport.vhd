@@ -5,7 +5,7 @@ use ieee.std_logic_arith.all ;
 
 entity dataport is
   port (
-		reset      : in std_logic ;
+		  reset      : in std_logic ;
         data       : in std_logic_vector(31 downto 0) ;
         clk        : in std_logic ;
         sram_addr  : out   std_logic_vector(19 downto 0) ;
@@ -20,11 +20,19 @@ entity dataport is
 end dataport ;
 
 architecture a_dataport of dataport is
+signal cnt2: std_logic_vector(1 downto 0) := "00" ;
+signal addr: std_logic_vector(19 downto 0) := b"0000_0000_0000_0000_0000" ;
 begin
 process(clk)
 begin
    if rising_edge(clk) then
-      
+      cnt2 <= cnt2 + 1 ;
+   end if ;
+end process ;
+process(cnt2(0))
+begin
+   if rising_edge(cnt2(0)) then
+      addr <= addr + 1 ;
    end if ;
 end process ;
 end architecture a_dataport ;

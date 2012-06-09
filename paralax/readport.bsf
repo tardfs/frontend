@@ -20,9 +20,9 @@ applicable agreement for further details.
 */
 (header "symbol" (version "1.1"))
 (symbol
-	(rect 16 16 264 176)
-	(text "dataport" (rect 5 0 61 12)(font "Arial" ))
-	(text "inst" (rect 8 144 36 156)(font "Arial" ))
+	(rect 16 16 264 208)
+	(text "readport" (rect 5 0 61 12)(font "Arial" ))
+	(text "inst" (rect 8 176 36 188)(font "Arial" ))
 	(port
 		(pt 0 32)
 		(input)
@@ -33,36 +33,36 @@ applicable agreement for further details.
 	(port
 		(pt 0 48)
 		(input)
-		(text "data[31..0]" (rect 0 0 77 12)(font "Arial" ))
-		(text "data[31..0]" (rect 21 43 98 55)(font "Arial" ))
-		(line (pt 0 48)(pt 16 48)(line_width 3))
+		(text "clk" (rect 0 0 21 12)(font "Arial" ))
+		(text "clk" (rect 21 43 42 55)(font "Arial" ))
+		(line (pt 0 48)(pt 16 48)(line_width 1))
 	)
 	(port
 		(pt 0 64)
 		(input)
-		(text "clk" (rect 0 0 21 12)(font "Arial" ))
-		(text "clk" (rect 21 59 42 71)(font "Arial" ))
+		(text "clkx4" (rect 0 0 35 12)(font "Arial" ))
+		(text "clkx4" (rect 21 59 56 71)(font "Arial" ))
 		(line (pt 0 64)(pt 16 64)(line_width 1))
 	)
 	(port
 		(pt 0 80)
 		(input)
-		(text "clkx4" (rect 0 0 35 12)(font "Arial" ))
-		(text "clkx4" (rect 21 75 56 87)(font "Arial" ))
+		(text "oe" (rect 0 0 14 12)(font "Arial" ))
+		(text "oe" (rect 21 75 35 87)(font "Arial" ))
 		(line (pt 0 80)(pt 16 80)(line_width 1))
 	)
 	(port
 		(pt 0 96)
 		(input)
-		(text "oe" (rect 0 0 14 12)(font "Arial" ))
-		(text "oe" (rect 21 91 35 103)(font "Arial" ))
-		(line (pt 0 96)(pt 16 96)(line_width 1))
+		(text "addr[19..0]" (rect 0 0 77 12)(font "Arial" ))
+		(text "addr[19..0]" (rect 21 91 98 103)(font "Arial" ))
+		(line (pt 0 96)(pt 16 96)(line_width 3))
 	)
 	(port
 		(pt 248 32)
 		(output)
-		(text "sram_addr[19..0]" (rect 0 0 113 12)(font "Arial" ))
-		(text "sram_addr[19..0]" (rect 114 27 227 39)(font "Arial" ))
+		(text "data[31..0]" (rect 0 0 77 12)(font "Arial" ))
+		(text "data[31..0]" (rect 150 27 227 39)(font "Arial" ))
 		(line (pt 248 32)(pt 232 32)(line_width 3))
 	)
 	(port
@@ -101,6 +101,13 @@ applicable agreement for further details.
 		(line (pt 248 128)(pt 232 128)(line_width 1))
 	)
 	(port
+		(pt 248 144)
+		(output)
+		(text "sram_addr[19..0]" (rect 0 0 113 12)(font "Arial" ))
+		(text "sram_addr[19..0]" (rect 114 139 227 151)(font "Arial" ))
+		(line (pt 248 144)(pt 232 144)(line_width 3))
+	)
+	(port
 		(pt 248 48)
 		(bidir)
 		(text "sram_dq[15..0]" (rect 0 0 99 12)(font "Arial" ))
@@ -108,6 +115,6 @@ applicable agreement for further details.
 		(line (pt 248 48)(pt 232 48)(line_width 3))
 	)
 	(drawing
-		(rectangle (rect 16 16 232 144)(line_width 1))
+		(rectangle (rect 16 16 232 176)(line_width 1))
 	)
 )
